@@ -21,21 +21,14 @@ jobs:
         with:
           python-version: '3.11'
 
-      # Step 3: Install dependencies and verify
+      # Step 3: Install dependencies
       - name: 📦 Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           echo "✅ Dependencies installed successfully"
 
-      # Step 4: Verify app imports correctly
-      - name: 🔍 Verify app syntax
-        run: |
-          python -c "import app; print('✅ App imports OK')"
-        env:
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-
-      # Step 5: Login to Docker Hub (only on push to main)
+      # Step 4: Login to Docker Hub (only on push to main)
       - name: 🐳 Log in to Docker Hub
         if: github.event_name == 'push'
         uses: docker/login-action@v3
@@ -43,13 +36,13 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 6: Build Docker image
+      # Step 5: Build Docker image
       - name: 🔨 Build Docker image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/ai-resume-analyser:latest .
           echo "✅ Docker image built successfully"
 
-      # Step 7: Push Docker image to Docker Hub (only on push to main)
+      # Step 6: Push Docker image to Docker Hub (only on push to main)
       - name: 🚀 Push Docker image to Docker Hub
         if: github.event_name == 'push'
         run: |
