@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+*.env
+
+# Uploads (user data - do not commit)
+uploads/
+
+# VS Code
+.vscode/
+
+# Docker
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
