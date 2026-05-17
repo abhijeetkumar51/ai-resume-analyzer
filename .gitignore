@@ -1,26 +1,35 @@
-# Python
+# ─── Python ───
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
-*.env
+
+# ─── Virtual Environment ───
 venv/
 env/
 .venv/
 
-# Environment variables
+# ─── Environment Variables (API keys — NEVER commit these!) ───
 .env
 *.env
+.env.local
+.env.production
 
-# Uploads (user data - do not commit)
-uploads/
+# ─── Uploaded Files (user data) ───
+uploads/*
+!uploads/.gitkeep
 
-# VS Code
+# ─── VS Code ───
 .vscode/
 
-# Docker
+# ─── Docker ───
 *.log
 
-# OS
+# ─── OS Files ───
 .DS_Store
 Thumbs.db
+
+# ─── Distribution / Build ───
+dist/
+build/
+*.egg-info/
