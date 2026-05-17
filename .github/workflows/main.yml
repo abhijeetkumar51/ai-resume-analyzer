@@ -1,4 +1,4 @@
-name: CI/CD - Build & Push Docker Image
+name: CI/CD — Build & Push Docker Image
 
 on:
   push:
@@ -7,38 +7,51 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      # Step 1: Checkout source code
+      - name: ✅ Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      # Step 2: Setup Python
+      - name: 🐍 Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      # Step 3: Install dependencies and verify
+      - name: 📦 Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          echo "✅ Dependencies installed successfully"
 
-      - name: Lint with flake8 (non-blocking)
+      # Step 4: Verify app imports correctly
+      - name: 🔍 Verify app syntax
         run: |
-          pip install flake8
-          flake8 app.py --max-line-length=120 || true
+          python -c "import app; print('✅ App imports OK')"
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
 
-      - name: Log in to Docker Hub
+      # Step 5: Login to Docker Hub (only on push to main)
+      - name: 🐳 Log in to Docker Hub
         if: github.event_name == 'push'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/ai-resume-analyser:latest .
+      # Step 6: Build Docker image
+      - name: 🔨 Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/ai-resume-analyser:latest .
+          echo "✅ Docker image built successfully"
 
-      - name: Push Docker image
+      # Step 7: Push Docker image to Docker Hub (only on push to main)
+      - name: 🚀 Push Docker image to Docker Hub
         if: github.event_name == 'push'
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/ai-resume-analyser:latest
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/ai-resume-analyser:latest
+          echo "✅ Docker image pushed to Docker Hub"

@@ -2,7 +2,7 @@ import os
 import json
 import re
 from flask import Flask, request, render_template, jsonify
-import google.generativeai as genai
+from groq import Groq
 import PyPDF2
 
 app = Flask(__name__)
@@ -12,10 +12,10 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 # Ensure uploads folder exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-# Configure Gemini API
-GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
+
+def get_api_key():
+    """Read Groq API key from environment at request time."""
+    return os.environ.get('GROQ_API_KEY', '')
 
 
 def extract_text_from_pdf(pdf_path):
@@ -25,21 +25,23 @@ def extract_text_from_pdf(pdf_path):
         with open(pdf_path, 'rb') as file:
             pdf_reader = PyPDF2.PdfReader(file)
             for page in pdf_reader.pages:
-                text += page.extract_text() + "\n"
+                extracted = page.extract_text()
+                if extracted:
+                    text += extracted + "\n"
     except Exception as e:
         raise Exception(f"Error reading PDF: {str(e)}")
     return text.strip()
 
 
-def analyze_resume_with_gemini(resume_text, job_description):
-    """Send resume and job description to Gemini AI for analysis."""
-    if not GEMINI_API_KEY:
-        raise Exception("GEMINI_API_KEY environment variable is not set.")
+def analyze_resume_with_groq(resume_text, job_description):
+    """Send resume and job description to Groq AI for analysis."""
+    api_key = get_api_key()
+    if not api_key:
+        raise Exception("GROQ_API_KEY is not set. Run: $env:GROQ_API_KEY='your_groq_key_here'")
 
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    client = Groq(api_key=api_key)
 
-    prompt = f"""
-You are an expert ATS (Applicant Tracking System) and HR specialist.
+    prompt = f"""You are an expert ATS (Applicant Tracking System) and HR specialist.
 Analyze the following resume against the job description provided.
 
 Return your analysis ONLY as a valid JSON object with EXACTLY this structure:
@@ -59,11 +61,25 @@ RESUME:
 JOB DESCRIPTION:
 {job_description}
 
-Return ONLY the JSON object, no markdown, no explanation, no code blocks.
-"""
+Return ONLY the JSON object, no markdown, no explanation, no code blocks."""
 
-    response = model.generate_content(prompt)
-    raw = response.text.strip()
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "system",
+                "content": "You are an expert ATS resume analyzer. Always respond with valid JSON only."
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        model="llama-3.3-70b-versatile",
+        temperature=0.3,
+        max_tokens=2048,
+    )
+
+    raw = chat_completion.choices[0].message.content.strip()
 
     # Strip markdown code fences if present
     raw = re.sub(r'^```(?:json)?\s*', '', raw)
@@ -105,10 +121,13 @@ def analyze():
     if not resume_text:
         return jsonify({'error': 'Could not extract text from the PDF. Ensure it is not a scanned image.'}), 400
 
-    # Analyze with Gemini
-    result = analyze_resume_with_gemini(resume_text, job_description)
-    return jsonify(result)
+    # Analyze with Groq AI
+    try:
+        result = analyze_resume_with_groq(resume_text, job_description)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5000, debug=True)
