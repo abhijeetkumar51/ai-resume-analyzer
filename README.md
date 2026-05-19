@@ -1,5 +1,4 @@
 # 🤖 AI Resume Analyzer
-
 > An AI-powered ATS Resume Analyzer built with **Flask**, **Groq AI (LLaMA 3.3 70B)**, **Docker**, and **GitHub Actions CI/CD**.
 
 [![CI/CD](https://github.com/abhijeetkumar51/ai-resume-analyzer/actions/workflows/main.yml/badge.svg)](https://github.com/abhijeetkumar51/ai-resume-analyzer/actions)

@@ -1,363 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Resume Analyzer | ATS Score Checker</title>
-  <meta name="description" content="AI-powered ATS Resume Analyzer — get instant score, skill gap analysis & suggestions." />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg: #080b14;
-      --card: rgba(255,255,255,0.04);
-      --border: rgba(255,255,255,0.08);
-      --accent: #7c6dfa;
-      --accent2: #c084fc;
-      --green: #10f5b0;
-      --red: #ff6b6b;
-      --yellow: #fbbf24;
-      --text: #e2e8f0;
-      --muted: #64748b;
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AI Resume Analyzer | ATS Score Checker</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#080c18;color:#e2e8f0;min-height:100vh;overflow-x:hidden}
 
-    /* ── Animated BG ── */
-    .bg-orbs{position:fixed;inset:0;pointer-events:none;z-index:0}
-    .orb{position:absolute;border-radius:50%;filter:blur(80px);animation:drift 12s ease-in-out infinite}
-    .orb1{width:500px;height:500px;background:radial-gradient(circle,rgba(124,109,250,.25),transparent);top:-10%;left:-10%;animation-delay:0s}
-    .orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(192,132,252,.2),transparent);top:50%;right:-10%;animation-delay:-4s}
-    .orb3{width:300px;height:300px;background:radial-gradient(circle,rgba(16,245,176,.15),transparent);bottom:-5%;left:40%;animation-delay:-8s}
-    @keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-20px) scale(1.05)}66%{transform:translate(-20px,30px) scale(.95)}}
+/* ── BG Orbs ── */
+.orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.o{position:absolute;border-radius:50%;filter:blur(90px);animation:drift 14s ease-in-out infinite}
+.o1{width:600px;height:600px;background:radial-gradient(circle,rgba(108,76,255,.35),transparent 70%);top:-15%;left:-10%;animation-delay:0s}
+.o2{width:500px;height:500px;background:radial-gradient(circle,rgba(192,100,255,.25),transparent 70%);top:30%;right:-15%;animation-delay:-5s}
+.o3{width:400px;height:400px;background:radial-gradient(circle,rgba(0,220,200,.2),transparent 70%);bottom:-10%;left:35%;animation-delay:-9s}
+.o4{width:300px;height:300px;background:radial-gradient(circle,rgba(255,60,120,.15),transparent 70%);top:60%;left:10%;animation-delay:-3s}
+@keyframes drift{0%,100%{transform:translate(0,0)}33%{transform:translate(25px,-20px)}66%{transform:translate(-20px,25px)}}
 
-    /* Particles */
-    .particles{position:fixed;inset:0;pointer-events:none;z-index:0}
-    .p{position:absolute;width:2px;height:2px;background:rgba(255,255,255,.4);border-radius:50%;animation:float-up linear infinite}
-    @keyframes float-up{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:1}90%{opacity:.5}100%{transform:translateY(-10vh) scale(1);opacity:0}}
+/* Particles */
+.pt{position:fixed;border-radius:50%;background:rgba(255,255,255,.6);pointer-events:none;z-index:0;animation:rise linear infinite}
+@keyframes rise{0%{transform:translateY(100vh);opacity:0}10%{opacity:1}90%{opacity:.3}100%{transform:translateY(-5vh);opacity:0}}
 
-    /* ── Layout ── */
-    .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 20px 80px}
+/* Grid */
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:55px 55px;pointer-events:none;z-index:0}
 
-    /* ── Header ── */
-    header{text-align:center;padding:70px 20px 50px;animation:fadeDown .8s ease both}
-    @keyframes fadeDown{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:translateY(0)}}
-    .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,109,250,.15);border:1px solid rgba(124,109,250,.3);border-radius:100px;padding:7px 18px;font-size:12px;font-weight:700;color:var(--accent2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:24px;animation:pulse-badge 3s ease-in-out infinite}
-    @keyframes pulse-badge{0%,100%{box-shadow:0 0 0 0 rgba(124,109,250,.3)}50%{box-shadow:0 0 0 8px rgba(124,109,250,0)}}
-    .badge-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:blink 1.5s ease-in-out infinite}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-    h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:900;line-height:1.1;margin-bottom:16px;background:linear-gradient(135deg,#fff 0%,var(--accent2) 50%,var(--green) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200% 200%;animation:gradient-shift 4s ease infinite}
-    @keyframes gradient-shift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-    .subtitle{color:var(--muted);font-size:1.05rem;max-width:500px;margin:0 auto;line-height:1.7;animation:fadeUp .8s .2s ease both}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+/* ── Layout ── */
+.wrap{position:relative;z-index:1;max-width:1060px;margin:0 auto;padding:0 20px 80px}
 
-    /* ── Stats Bar ── */
-    .stats{display:flex;justify-content:center;gap:40px;margin:32px 0;animation:fadeUp .8s .3s ease both;flex-wrap:wrap}
-    .stat{text-align:center}
-    .stat-num{font-size:1.6rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .stat-label{font-size:12px;color:var(--muted);margin-top:2px}
+/* ── Header ── */
+header{text-align:center;padding:68px 20px 44px;animation:fd .8s ease}
+@keyframes fd{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:translateY(0)}}
 
-    /* ── Upload Card ── */
-    .card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px;backdrop-filter:blur(20px);animation:fadeUp .8s .4s ease both;box-shadow:0 25px 60px rgba(0,0,0,.4)}
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-    @media(max-width:680px){.form-grid{grid-template-columns:1fr}}
-    .field-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.badge{display:inline-flex;align-items:center;gap:9px;background:rgba(108,76,255,.18);border:1px solid rgba(108,76,255,.45);border-radius:100px;padding:8px 20px;font-size:12px;font-weight:700;color:#c084fc;letter-spacing:.08em;text-transform:uppercase;margin-bottom:24px;animation:glow 3s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(108,76,255,.5),0 0 20px rgba(108,76,255,.1)}50%{box-shadow:0 0 0 7px rgba(108,76,255,0),0 0 35px rgba(108,76,255,.25)}}
+.dot{width:8px;height:8px;background:#10f5b0;border-radius:50%;box-shadow:0 0 10px #10f5b0;animation:blink 1.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.6)}}
 
-    /* Drop Zone */
-    .drop-zone{border:2px dashed rgba(124,109,250,.35);border-radius:14px;padding:40px 20px;text-align:center;cursor:pointer;position:relative;transition:all .3s;background:rgba(124,109,250,.03)}
-    .drop-zone:hover,.drop-zone.over{border-color:var(--accent);background:rgba(124,109,250,.08);transform:scale(1.01)}
-    .drop-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-    .upload-icon{font-size:48px;margin-bottom:12px;transition:transform .3s;display:block}
-    .drop-zone:hover .upload-icon{transform:translateY(-5px) scale(1.1)}
-    .drop-text{font-size:15px;font-weight:600}
-    .drop-sub{font-size:12px;color:var(--muted);margin-top:5px}
-    .file-info{margin-top:12px;display:none;align-items:center;justify-content:center;gap:8px;background:rgba(16,245,176,.1);border:1px solid rgba(16,245,176,.25);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;color:var(--green);animation:pop .3s ease}
-    @keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+h1{font-size:clamp(2.2rem,6.5vw,4.2rem);font-weight:900;line-height:1.08;margin-bottom:16px;background:linear-gradient(130deg,#fff 20%,#a78bfa 55%,#10f5b0 90%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:250%;animation:gs 6s ease infinite}
+@keyframes gs{0%,100%{background-position:0%}50%{background-position:100%}}
 
-    /* Textarea */
-    textarea{width:100%;height:195px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;padding:14px 16px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;resize:vertical;outline:none;transition:border-color .3s,box-shadow .3s}
-    textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,109,250,.15)}
-    textarea::placeholder{color:var(--muted)}
+.sub{color:#64748b;font-size:1rem;max-width:470px;margin:0 auto 30px;line-height:1.75;animation:fu .8s .15s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
-    /* Button */
-    .btn{width:100%;margin-top:24px;padding:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:14px;color:#fff;font-size:16px;font-weight:800;cursor:pointer;letter-spacing:.03em;transition:all .3s;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:10px}
-    .btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--accent2),var(--accent));opacity:0;transition:opacity .3s}
-    .btn:hover{transform:translateY(-2px);box-shadow:0 15px 40px rgba(124,109,250,.4)}
-    .btn:hover::after{opacity:1}
-    .btn span,.btn-text{position:relative;z-index:1}
-    .btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+/* Stat cards */
+.stats{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:4px;animation:fu .8s .25s ease both}
+.st{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px 22px;text-align:center;backdrop-filter:blur(12px);transition:transform .3s,box-shadow .3s}
+.st:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(108,76,255,.3)}
+.sn{font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#a78bfa,#10f5b0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sl{font-size:11px;color:#64748b;margin-top:3px;font-weight:500}
 
-    /* ── Loader ── */
-    #loader{display:none;text-align:center;padding:60px 20px}
-    .loader-ring{width:64px;height:64px;margin:0 auto 20px;position:relative}
-    .loader-ring::before,.loader-ring::after{content:'';position:absolute;border-radius:50%;border:3px solid transparent}
-    .loader-ring::before{inset:0;border-top-color:var(--accent);animation:spin .8s linear infinite}
-    .loader-ring::after{inset:8px;border-top-color:var(--accent2);animation:spin .6s linear infinite reverse}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .loader-steps{display:flex;flex-direction:column;gap:8px;margin-top:20px}
-    .loader-step{font-size:13px;color:var(--muted);opacity:0;animation:step-in .4s ease forwards}
-    @keyframes step-in{to{opacity:1;color:var(--green)}}
+/* ── Main Card ── */
+.card{background:rgba(255,255,255,.04);border:1px solid rgba(108,76,255,.3);border-radius:22px;padding:36px;backdrop-filter:blur(28px);box-shadow:0 0 0 1px rgba(108,76,255,.1),0 30px 80px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07);animation:fu .8s .35s ease both;margin-top:32px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:640px){.grid{grid-template-columns:1fr}}
+.lbl{font-size:12px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:11px;display:flex;align-items:center;gap:6px}
 
-    /* ── Results ── */
-    #results{display:none}
-    .results-header{text-align:center;padding:40px 0 20px;animation:fadeUp .6s ease both}
-    .results-header h2{font-size:1.8rem;font-weight:800;margin-bottom:8px}
-    .results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
+/* 3D Drop Zone */
+.dz{border:2px dashed rgba(108,76,255,.4);border-radius:16px;padding:38px 20px;text-align:center;cursor:pointer;position:relative;background:linear-gradient(135deg,rgba(108,76,255,.06),rgba(16,245,176,.03));transition:all .35s;overflow:hidden}
+.dz::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(108,76,255,.12),rgba(192,100,255,.06));opacity:0;transition:opacity .35s}
+.dz:hover,.dz.on{border-color:#7c6dfa;transform:scale(1.015)}.dz:hover::before,.dz.on::before{opacity:1}
+.dz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 
-    /* Score Card */
-    .score-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;backdrop-filter:blur(20px);grid-column:1/-1;display:flex;align-items:center;gap:32px;flex-wrap:wrap;box-shadow:0 25px 60px rgba(0,0,0,.4);animation:fadeUp .5s ease both}
-    .score-ring{position:relative;width:140px;height:140px;flex-shrink:0}
-    .score-ring svg{transform:rotate(-90deg)}
-    .score-ring circle{fill:none;stroke-width:10;stroke-linecap:round}
-    .ring-bg{stroke:rgba(255,255,255,.07)}
-    .ring-fill{stroke:var(--accent);stroke-dasharray:345;stroke-dashoffset:345;transition:stroke-dashoffset 1.5s cubic-bezier(.4,0,.2,1)}
-    .score-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-    .score-num{font-size:2rem;font-weight:900;line-height:1}
-    .score-label{font-size:11px;color:var(--muted);margin-top:2px}
-    .score-info h2{font-size:1.5rem;font-weight:800;margin-bottom:8px}
-    .score-info p{color:var(--muted);font-size:14px;line-height:1.7;max-width:500px}
+/* 3D Document Icon */
+.doc3d{position:relative;width:72px;height:86px;margin:0 auto 16px;transform-style:preserve-3d;animation:float3d 3s ease-in-out infinite}
+@keyframes float3d{0%,100%{transform:translateY(0) rotateX(5deg) rotateY(-8deg)}50%{transform:translateY(-8px) rotateX(-3deg) rotateY(8deg)}}
+.doc3d-body{width:72px;height:86px;background:linear-gradient(145deg,#9b7dff,#6c4cff);border-radius:10px 10px 10px 10px;position:absolute;box-shadow:0 20px 40px rgba(108,76,255,.5),4px 4px 0 rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.3)}
+.doc3d-fold{position:absolute;top:0;right:0;width:22px;height:22px;background:linear-gradient(225deg,#c084fc,#8b5cf6);border-radius:0 10px 0 10px;clip-path:polygon(0 0,100% 0,100% 100%)}
+.doc3d-lines{position:absolute;bottom:14px;left:10px;right:10px}
+.doc3d-lines span{display:block;height:3px;background:rgba(255,255,255,.45);border-radius:2px;margin-bottom:5px}
+.doc3d-lines span:nth-child(2){width:70%}.doc3d-lines span:nth-child(3){width:55%}
 
-    /* Result Cards */
-    .res-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;backdrop-filter:blur(20px);box-shadow:0 10px 30px rgba(0,0,0,.3);animation:fadeUp .5s ease both;transition:transform .3s,box-shadow .3s}
-    .res-card:hover{transform:translateY(-3px);box-shadow:0 20px 50px rgba(0,0,0,.4)}
-    .res-card h3{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-    .tags{display:flex;flex-wrap:wrap;gap:8px}
-    .tag{padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600;animation:pop .3s ease both}
-    .tg{background:rgba(16,245,176,.1);color:var(--green);border:1px solid rgba(16,245,176,.25)}
-    .tr{background:rgba(255,107,107,.1);color:var(--red);border:1px solid rgba(255,107,107,.25)}
-    .ty{background:rgba(251,191,36,.1);color:var(--yellow);border:1px solid rgba(251,191,36,.25)}
-    .tp{background:rgba(124,109,250,.1);color:var(--accent2);border:1px solid rgba(124,109,250,.25)}
-    .list{list-style:none}
-    .list li{padding:9px 0;border-bottom:1px solid var(--border);font-size:14px;color:var(--muted);line-height:1.6;display:flex;gap:10px;align-items:flex-start;animation:slideIn .4s ease both}
-    .list li:last-child{border-bottom:none}
-    @keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
-    .bullet{flex-shrink:0;font-size:15px}
+.dt{font-size:15px;font-weight:700;color:#e2e8f0}.ds{font-size:12px;color:#64748b;margin-top:5px}
+.fi{display:none;margin-top:12px;align-items:center;justify-content:center;gap:7px;background:rgba(16,245,176,.12);border:1px solid rgba(16,245,176,.3);border-radius:9px;padding:8px 14px;font-size:13px;font-weight:600;color:#10f5b0;animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
 
-    /* Error */
-    #err{display:none;margin-top:16px;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.25);border-radius:12px;padding:14px 18px;color:var(--red);font-size:14px;font-weight:500;animation:pop .3s ease}
+/* Textarea */
+textarea{width:100%;height:195px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 16px;color:#e2e8f0;font-family:'Inter',sans-serif;font-size:14px;line-height:1.65;resize:vertical;outline:none;transition:border-color .3s,box-shadow .3s}
+textarea:focus{border-color:#7c6dfa;box-shadow:0 0 0 3px rgba(124,109,250,.2),0 0 25px rgba(124,109,250,.08)}
+textarea::placeholder{color:#475569}
 
-    /* Footer */
-    footer{text-align:center;padding:24px;color:var(--muted);font-size:13px;border-top:1px solid var(--border);position:relative;z-index:1}
-    footer span{color:var(--accent2)}
+/* Button */
+.btn{width:100%;margin-top:20px;padding:17px;background:linear-gradient(135deg,#6c4cff,#c084fc);border:none;border-radius:14px;color:#fff;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;position:relative;overflow:hidden;transition:all .3s;letter-spacing:.02em}
+.btn::after{content:'';position:absolute;top:0;left:-120%;width:55%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transform:skewX(-20deg);transition:left .65s}
+.btn:hover{transform:translateY(-3px);box-shadow:0 20px 50px rgba(108,76,255,.55)}.btn:hover::after{left:150%}
+.btn>*{position:relative;z-index:1}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
 
-    /* Reveal animation delays for result cards */
-    .res-card:nth-child(2){animation-delay:.1s}
-    .res-card:nth-child(3){animation-delay:.15s}
-    .res-card:nth-child(4){animation-delay:.2s}
-    .res-card:nth-child(5){animation-delay:.25s}
-    .res-card:nth-child(6){animation-delay:.3s}
+/* Error */
+#err{display:none;margin-top:14px;background:rgba(255,107,107,.09);border:1px solid rgba(255,107,107,.28);border-radius:12px;padding:13px 17px;color:#ff6b6b;font-size:13.5px;font-weight:500;animation:pop .35s ease}
 
-    /* Shimmer on hover for tags */
-    .tag:hover{filter:brightness(1.2);transform:scale(1.05);transition:all .2s}
-  </style>
+/* ── Loader ── */
+#loader{display:none;text-align:center;padding:56px 20px}
+.rings{position:relative;width:70px;height:70px;margin:0 auto 22px}
+.rings::before,.rings::after{content:'';position:absolute;border-radius:50%;border:3px solid transparent;animation:spin .85s linear infinite}
+.rings::before{inset:0;border-top-color:#7c6dfa;border-right-color:rgba(124,109,250,.2)}
+.rings::after{inset:9px;border-top-color:#10f5b0;animation-duration:.6s;animation-direction:reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lsteps{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.lstep{font-size:13px;color:#475569;opacity:0;transform:translateX(-8px);transition:all .4s}
+.lstep.on{opacity:1;transform:translateX(0);color:#10f5b0}
+
+/* ── Results ── */
+#results{display:none;margin-top:40px}
+.rh{text-align:center;padding:0 0 24px;animation:fu .6s ease}
+.rh h2{font-size:1.7rem;font-weight:800;background:linear-gradient(135deg,#fff,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.rh p{color:#475569;font-size:13px;margin-top:6px}
+.rg{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px}
+
+/* Score Card */
+.sc{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:32px;backdrop-filter:blur(24px);grid-column:1/-1;display:flex;align-items:center;gap:36px;flex-wrap:wrap;box-shadow:0 30px 80px rgba(0,0,0,.5);animation:fu .5s ease}
+.sr{position:relative;width:150px;height:150px;flex-shrink:0}
+.sr svg{transform:rotate(-90deg);filter:drop-shadow(0 0 16px rgba(16,245,176,.4))}
+.sr circle{fill:none;stroke-width:10;stroke-linecap:round}
+.rb{stroke:rgba(255,255,255,.06)}
+.rf{stroke:#10f5b0;stroke-dasharray:345;stroke-dashoffset:345;transition:stroke-dashoffset 1.8s cubic-bezier(.4,0,.2,1)}
+.sc-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sc-v{font-size:2.2rem;font-weight:900}.sc-l{font-size:11px;color:#64748b;margin-top:2px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.si h2{font-size:1.4rem;font-weight:800;margin-bottom:8px}
+.si p{color:#64748b;font-size:14px;line-height:1.7;max-width:480px}
+
+/* Result Cards */
+.rc{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:22px;backdrop-filter:blur(20px);transition:transform .3s,box-shadow .3s,border-color .3s;animation:fu .5s ease both}
+.rc:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,.4),0 0 0 1px rgba(108,76,255,.2)}
+.rc h3{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:15px;display:flex;align-items:center;gap:7px}
+.tgs{display:flex;flex-wrap:wrap;gap:7px}
+.tg{padding:5px 13px;border-radius:100px;font-size:12px;font-weight:600;transition:all .2s;animation:pop .4s cubic-bezier(.34,1.56,.64,1) both;cursor:default}
+.tg:hover{transform:scale(1.1) translateY(-1px)}
+.gg{background:rgba(16,245,176,.12);color:#10f5b0;border:1px solid rgba(16,245,176,.28)}
+.gr{background:rgba(255,107,107,.12);color:#ff6b6b;border:1px solid rgba(255,107,107,.28)}
+.gy{background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.28)}
+.ls{list-style:none}
+.ls li{padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13.5px;color:#94a3b8;line-height:1.6;display:flex;gap:9px;align-items:flex-start;animation:sl .4s ease both}
+.ls li:last-child{border-bottom:none}
+@keyframes sl{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+.blt{flex-shrink:0}
+
+footer{text-align:center;padding:26px;color:#334155;font-size:12.5px;border-top:1px solid rgba(255,255,255,.06);position:relative;z-index:1}
+footer span{color:#a78bfa}
+
+
+</style>
 </head>
 <body>
-
-<!-- Animated Background -->
-<div class="bg-orbs">
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
-  <div class="orb orb3"></div>
-</div>
-<div class="particles" id="particles"></div>
+<div class="orbs"><div class="o o1"></div><div class="o o2"></div><div class="o o3"></div><div class="o o4"></div></div>
+<div id="pts"></div>
 
 <header>
-  <div class="badge"><div class="badge-dot"></div> Live AI Analysis</div>
+  <div class="badge"><div class="dot"></div>✦ AI Powered Analysis</div>
   <h1>AI Resume Analyzer</h1>
-  <p class="subtitle">Get an instant ATS score, skill gap analysis, and personalized suggestions powered by Groq LLaMA AI.</p>
+  <p class="sub">Upload your resume & paste a job description — get instant ATS score, skill gap analysis & personalized suggestions.</p>
   <div class="stats">
-    <div class="stat"><div class="stat-num">10+</div><div class="stat-label">Analysis Points</div></div>
-    <div class="stat"><div class="stat-num">&lt;5s</div><div class="stat-label">Response Time</div></div>
-    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Free to Use</div></div>
+    <div class="st"><div class="sn" id="cnt">0+</div><div class="sl">Analyzed</div></div>
+    <div class="st"><div class="sn">&lt;5s</div><div class="sl">Speed</div></div>
+    <div class="st"><div class="sn">7</div><div class="sl">Metrics</div></div>
+    <div class="st"><div class="sn">100%</div><div class="sl">Free</div></div>
   </div>
 </header>
 
 <div class="wrap">
   <div class="card">
     <form id="form">
-      <div class="form-grid">
+      <div class="grid">
         <div>
-          <div class="field-label">📄 Resume (PDF)</div>
-          <div class="drop-zone" id="dz">
-            <input type="file" id="resumeFile" accept=".pdf" required />
-            <span class="upload-icon">📎</span>
-            <div class="drop-text">Drag & drop your PDF</div>
-            <div class="drop-sub">or click to browse</div>
-            <div class="file-info" id="fileInfo"><span>✅</span><span id="fileName"></span></div>
+          <div class="lbl">📄 Upload Resume</div>
+          <div class="dz" id="dz">
+            <input type="file" id="rf" accept=".pdf" required/>
+            <div class="doc3d">
+              <div class="doc3d-body">
+                <div class="doc3d-fold"></div>
+                <div class="doc3d-lines"><span></span><span></span><span></span></div>
+              </div>
+            </div>
+            <div class="dt">Drag & drop your PDF here</div>
+            <div class="ds">or click to browse · PDF only</div>
+            <div class="fi" id="fi"><span>✅</span><span id="fn"></span></div>
           </div>
         </div>
         <div>
-          <div class="field-label">💼 Job Description</div>
-          <textarea id="jobDesc" placeholder="Paste the full job description here...&#10;&#10;Include required skills, responsibilities and qualifications for best results." required></textarea>
+          <div class="lbl">💼 Paste Job Description</div>
+          <textarea id="jd" placeholder="Paste the full job description here...&#10;&#10;Include required skills, responsibilities and qualifications for the best ATS analysis." required></textarea>
         </div>
       </div>
       <button type="submit" class="btn" id="btn">
-        <span>⚡</span><span class="btn-text">Analyze My Resume</span>
+        <span>⚡</span><span id="bt">Analyze My Resume</span>
       </button>
       <div id="err"></div>
     </form>
   </div>
 
-  <!-- Loader -->
   <div id="loader">
-    <div class="loader-ring"></div>
-    <p style="font-weight:600;font-size:15px;margin-bottom:12px">Groq AI is analyzing your resume…</p>
-    <div class="loader-steps">
-      <div class="loader-step" id="s1" style="animation-delay:.5s">📄 Extracting resume text…</div>
-      <div class="loader-step" id="s2" style="animation-delay:1.2s">🔍 Comparing with job description…</div>
-      <div class="loader-step" id="s3" style="animation-delay:2s">🤖 Generating ATS score…</div>
-      <div class="loader-step" id="s4" style="animation-delay:2.8s">✨ Preparing suggestions…</div>
+    <div class="rings"></div>
+    <p style="font-weight:700;font-size:15px;color:#e2e8f0">Analyzing your resume with AI…</p>
+    <div class="lsteps">
+      <div class="lstep" id="s1">📄 Extracting resume content…</div>
+      <div class="lstep" id="s2">🔍 Matching with job requirements…</div>
+      <div class="lstep" id="s3">🤖 Calculating ATS score…</div>
+      <div class="lstep" id="s4">✨ Building improvement plan…</div>
     </div>
   </div>
 
-  <!-- Results -->
   <div id="results">
-    <div class="results-header">
-      <h2>📊 Analysis Complete</h2>
-      <p style="color:var(--muted);font-size:14px">Here's your detailed ATS breakdown</p>
-    </div>
-    <div class="results-grid">
-      <!-- Score -->
-      <div class="score-card">
-        <div class="score-ring">
-          <svg width="140" height="140" viewBox="0 0 140 140">
-            <circle class="ring-bg" cx="70" cy="70" r="55"/>
-            <circle class="ring-fill" cx="70" cy="70" r="55" id="ring"/>
+    <div class="rh"><h2>📊 Your ATS Analysis</h2><p>AI-powered breakdown of your resume vs. job description</p></div>
+    <div class="rg">
+      <div class="sc">
+        <div class="sr">
+          <svg width="150" height="150" viewBox="0 0 150 150">
+            <circle class="rb" cx="75" cy="75" r="55"/>
+            <circle class="rf" cx="75" cy="75" r="55" id="ring"/>
           </svg>
-          <div class="score-center">
-            <div class="score-num" id="scoreNum">0%</div>
-            <div class="score-label">ATS Score</div>
-          </div>
+          <div class="sc-c"><div class="sc-v" id="sv">0%</div><div class="sc-l">ATS Score</div></div>
         </div>
-        <div class="score-info">
-          <h2 id="scoreTxt">Your Result</h2>
-          <p id="summary">Upload your resume and job description to see results.</p>
-        </div>
+        <div class="si"><h2 id="sl2">Your Result</h2><p id="sm"></p></div>
       </div>
-      <!-- Matching -->
-      <div class="res-card">
-        <h3><span>✅</span> Matching Skills</h3>
-        <div class="tags" id="matching"></div>
-      </div>
-      <!-- Missing -->
-      <div class="res-card">
-        <h3><span>❌</span> Missing Skills</h3>
-        <div class="tags" id="missing"></div>
-      </div>
-      <!-- Strengths -->
-      <div class="res-card">
-        <h3><span>💪</span> Strengths</h3>
-        <ul class="list" id="strengths"></ul>
-      </div>
-      <!-- Weaknesses -->
-      <div class="res-card">
-        <h3><span>⚠️</span> Weaknesses</h3>
-        <ul class="list" id="weaknesses"></ul>
-      </div>
-      <!-- Suggestions -->
-      <div class="res-card" style="grid-column:1/-1">
-        <h3><span>🚀</span> Improvement Suggestions</h3>
-        <ul class="list" id="suggestions"></ul>
-      </div>
+      <div class="rc"><h3><span>✅</span>Matching Skills</h3><div class="tgs" id="ms"></div></div>
+      <div class="rc"><h3><span>❌</span>Missing Skills</h3><div class="tgs" id="xs"></div></div>
+      <div class="rc"><h3><span>💪</span>Strengths</h3><ul class="ls" id="str"></ul></div>
+      <div class="rc"><h3><span>⚠️</span>Weaknesses</h3><ul class="ls" id="wk"></ul></div>
+      <div class="rc" style="grid-column:1/-1"><h3><span>🚀</span>Improvement Suggestions</h3><ul class="ls" id="sg"></ul></div>
     </div>
   </div>
 </div>
 
-<footer>Built with <span>♥</span> using Flask · Groq AI · Docker · GitHub Actions</footer>
+<footer>Built with <span>♥</span> using Flask · AI · Docker · GitHub Actions</footer>
 
 <script>
-  // ── Particles ──
-  const pc = document.getElementById('particles');
-  for(let i=0;i<35;i++){
-    const p=document.createElement('div');
-    p.className='p';
-    p.style.cssText=`left:${Math.random()*100}%;animation-duration:${8+Math.random()*15}s;animation-delay:-${Math.random()*20}s;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;opacity:${.2+Math.random()*.5}`;
-    pc.appendChild(p);
-  }
+// Particles
+(function(){const c=document.getElementById('pts');for(let i=0;i<45;i++){const d=document.createElement('div');d.className='pt';const s=.5+Math.random()*2;d.style.cssText=`position:fixed;left:${Math.random()*100}%;width:${s}px;height:${s}px;animation-duration:${10+Math.random()*18}s;animation-delay:-${Math.random()*25}s;opacity:${.1+Math.random()*.5}`;c.appendChild(d)}})();
 
-  // ── Drag & Drop ──
-  const dz=document.getElementById('dz');
-  const fi=document.getElementById('resumeFile');
-  const fileInfo=document.getElementById('fileInfo');
-  const fileName=document.getElementById('fileName');
-  dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over')});
-  dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
-  dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');if(e.dataTransfer.files[0]){fi.files=e.dataTransfer.files;showFile(e.dataTransfer.files[0].name)}});
-  fi.addEventListener('change',()=>fi.files[0]&&showFile(fi.files[0].name));
-  function showFile(n){fileName.textContent=n;fileInfo.style.display='flex'}
+// Counter
+let n=0;const cel=document.getElementById('cnt');const ti=setInterval(()=>{n++;cel.textContent=n+'+';if(n>=47)clearInterval(ti)},35);
 
-  // ── Form Submit ──
-  document.getElementById('form').addEventListener('submit',async e=>{
-    e.preventDefault();
-    const btn=document.getElementById('btn');
-    const err=document.getElementById('err');
-    const loader=document.getElementById('loader');
-    const results=document.getElementById('results');
-    const steps=document.querySelectorAll('.loader-step');
+// Drag drop
+const dz=document.getElementById('dz'),rf=document.getElementById('rf'),fi=document.getElementById('fi'),fn=document.getElementById('fn');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('on')});
+dz.addEventListener('dragleave',()=>dz.classList.remove('on'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('on');if(e.dataTransfer.files[0]){rf.files=e.dataTransfer.files;show(e.dataTransfer.files[0].name)}});
+rf.addEventListener('change',()=>rf.files[0]&&show(rf.files[0].name));
+function show(n2){fn.textContent=n2.length>28?n2.slice(0,25)+'…':n2;fi.style.display='flex'}
 
-    err.style.display='none';
-    results.style.display='none';
-    loader.style.display='block';
-    btn.disabled=true;
-    btn.querySelector('.btn-text').textContent='Analyzing…';
+// Loader steps
+const sids=['s1','s2','s3','s4'],dels=[400,1300,2200,3100];let ts=[];
+function startSteps(){sids.forEach((id,i)=>{ts.push(setTimeout(()=>document.getElementById(id).classList.add('on'),dels[i]))})}
+function clearSteps(){ts.forEach(clearTimeout);ts=[];sids.forEach(id=>document.getElementById(id).classList.remove('on'))}
 
-    // Reset step animations
-    steps.forEach(s=>{s.style.animation='none';s.style.opacity='0';void s.offsetWidth;s.style.animation=''});
+// Submit
+document.getElementById('form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const btn=document.getElementById('btn'),bt=document.getElementById('bt'),err=document.getElementById('err'),loader=document.getElementById('loader'),results=document.getElementById('results');
+  err.style.display='none';results.style.display='none';loader.style.display='block';
+  btn.disabled=true;bt.textContent='Analyzing…';clearSteps();startSteps();
+  const fd=new FormData();fd.append('resume',rf.files[0]);fd.append('job_description',document.getElementById('jd').value);
+  try{
+    const r=await fetch('/analyze',{method:'POST',body:fd}),d=await r.json();
+    if(!r.ok)throw new Error(d.error||'Server error');
+    render(d);
+  }catch(ex){err.textContent='⚠️ '+ex.message;err.style.display='block';}
+  finally{loader.style.display='none';btn.disabled=false;bt.textContent='Analyze My Resume';}
+});
 
-    const fd=new FormData();
-    fd.append('resume',fi.files[0]);
-    fd.append('job_description',document.getElementById('jobDesc').value);
+function render(d){
+  const s=Math.min(100,Math.max(0,d.ats_score||0));
+  const ring=document.getElementById('ring');
+  const col=s>=70?'#10f5b0':s>=45?'#fbbf24':'#ff6b6b';
+  const glow=s>=70?'rgba(16,245,176,.5)':s>=45?'rgba(251,191,36,.5)':'rgba(255,107,107,.5)';
+  ring.style.stroke=col;ring.style.transition='stroke-dashoffset 1.8s cubic-bezier(.4,0,.2,1)';
+  document.querySelector('.sr svg').style.filter=`drop-shadow(0 0 18px ${glow})`;
+  setTimeout(()=>{ring.style.strokeDashoffset=345-(s/100)*345},80);
+  let cur=0;const sv=document.getElementById('sv');
+  const ct=setInterval(()=>{cur=Math.min(cur+2,s);sv.textContent=cur+'%';if(cur>=s)clearInterval(ct)},18);
+  document.getElementById('sl2').textContent=s>=70?'🎉 Excellent Match!':s>=45?'📈 Room to Improve':'⚠️ Needs Work';
+  document.getElementById('sm').textContent=d.summary||'';
+  mkT('ms',d.matching_skills||[],'gg');mkT('xs',d.missing_skills||[],'gr');
+  mkL('str',d.strengths||[],'✅');mkL('wk',d.weaknesses||[],'⚠️');mkL('sg',d.suggestions||[],'💡');
+  const res=document.getElementById('results');res.style.display='block';
+  setTimeout(()=>res.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+function mkT(id,a,c){document.getElementById(id).innerHTML=a.length?a.map((x,i)=>`<span class="tg ${c}" style="animation-delay:${i*.06}s">${x}</span>`).join(''):'<span class="tg gy">None identified</span>';}
+function mkL(id,a,ic){document.getElementById(id).innerHTML=a.length?a.map((x,i)=>`<li style="animation-delay:${i*.07}s"><span class="blt">${ic}</span>${x}</li>`).join(''):'<li><span class="blt">—</span>None identified</li>';}
 
-    try{
-      const res=await fetch('/analyze',{method:'POST',body:fd});
-      const data=await res.json();
-      if(!res.ok)throw new Error(data.error||'Server error');
-      render(data);
-    }catch(ex){
-      err.textContent='⚠️ '+ex.message;
-      err.style.display='block';
-    }finally{
-      loader.style.display='none';
-      btn.disabled=false;
-      btn.querySelector('.btn-text').textContent='Analyze My Resume';
-    }
-  });
 
-  // ── Render Results ──
-  function render(d){
-    const score=Math.min(100,Math.max(0,d.ats_score||0));
-    const circ=345;
-    const ring=document.getElementById('ring');
-    const color=score>=70?'var(--green)':score>=45?'var(--yellow)':'var(--red)';
-    ring.style.stroke=color;
-    setTimeout(()=>{ring.style.strokeDashoffset=circ-(score/100)*circ},100);
 
-    // Count-up
-    let cur=0;
-    const el=document.getElementById('scoreNum');
-    const t=setInterval(()=>{cur=Math.min(cur+2,score);el.textContent=cur+'%';if(cur>=score)clearInterval(t)},20);
-
-    document.getElementById('scoreTxt').textContent=score>=70?'🎉 Great Match!':score>=45?'📈 Needs Improvement':'⚠️ Poor Match';
-    document.getElementById('summary').textContent=d.summary||'';
-
-    mkTags('matching',d.matching_skills||[],'tg');
-    mkTags('missing',d.missing_skills||[],'tr');
-    mkList('strengths',d.strengths||[],'✅');
-    mkList('weaknesses',d.weaknesses||[],'⚠️');
-    mkList('suggestions',d.suggestions||[],'💡');
-
-    document.getElementById('results').style.display='block';
-    setTimeout(()=>document.getElementById('results').scrollIntoView({behavior:'smooth'}),100);
-  }
-
-  function mkTags(id,items,cls){
-    const el=document.getElementById(id);
-    el.innerHTML=items.length?items.map((x,i)=>`<span class="tag ${cls}" style="animation-delay:${i*.05}s">${x}</span>`).join(''):'<span class="tag ty">None identified</span>';
-  }
-  function mkList(id,items,icon){
-    const el=document.getElementById(id);
-    el.innerHTML=items.length?items.map((x,i)=>`<li style="animation-delay:${i*.07}s"><span class="bullet">${icon}</span>${x}</li>`).join(''):`<li><span class="bullet">—</span>None identified</li>`;
-  }
 </script>
 </body>
 </html>
