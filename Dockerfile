@@ -1,5 +1,8 @@
-# Use official lightweight Python image
-FROM python:3.11-slim
+# Use latest patched Python slim image
+FROM python:3.13-slim
+
+# Patch OS-level vulnerabilities in base image
+RUN apt-get update && apt-get upgrade -y && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set working directory inside container
 WORKDIR /app
