@@ -1,11 +1,17 @@
 import os
 import json
 import re
+from dotenv import load_dotenv
 from flask import Flask, request, render_template, jsonify
+from flask_cors import CORS
 from groq import Groq
 import PyPDF2
 
+# Load .env file automatically if present
+load_dotenv()
+
 app = Flask(__name__)
+CORS(app, origins=['http://localhost:5173', 'http://127.0.0.1:5173'])
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
@@ -15,7 +21,7 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 def get_api_key():
     """Read Groq API key from environment at request time."""
-    return os.environ.get('GROQ_API_KEY', '')
+    return os.environ.get('GROQ_API_KEY', '').strip()
 
 
 def extract_text_from_pdf(pdf_path):
@@ -37,7 +43,8 @@ def analyze_resume_with_groq(resume_text, job_description):
     """Send resume and job description to Groq AI for analysis."""
     api_key = get_api_key()
     if not api_key:
-        raise Exception("GROQ_API_KEY is not set. Run: $env:GROQ_API_KEY='your_groq_key_here'")
+        raise Exception("GROQ_API_KEY is not set. Edit C:\\Ai-Resume-Analyser\\.env and add your key: GROQ_API_KEY=gsk_...")
+
 
     client = Groq(api_key=api_key)
 
