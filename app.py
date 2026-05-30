@@ -120,7 +120,7 @@ def analyze():
         return jsonify({'error': 'Job description cannot be empty.'}), 400
 
     # Save the uploaded PDF
-    pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], 'resume.pdf')
+    pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], 'cv.pdf')
     file.save(pdf_path)
 
     # Extract text from PDF
