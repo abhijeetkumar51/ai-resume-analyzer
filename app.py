@@ -101,6 +101,54 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/optimize', methods=['POST'])
+def optimize_prompt():
+    """Rewrite a raw job description into a structured, ATS-friendly prompt."""
+    data = request.get_json(silent=True) or {}
+    jd = (data.get('job_description') or '').strip()
+
+    if not jd:
+        return jsonify({'error': 'Job description cannot be empty.'}), 400
+
+    api_key = get_api_key()
+    if not api_key:
+        return jsonify({'error': 'GROQ_API_KEY is not set. Add your key to the .env file.'}), 500
+
+    try:
+        client = Groq(api_key=api_key)
+        completion = client.chat.completions.create(
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are an expert technical recruiter and prompt engineer. You rewrite messy job descriptions into clear, structured, ATS-friendly ones."
+                },
+                {
+                    "role": "user",
+                    "content": f"""Rewrite the following raw job description into a clean, structured, ATS-optimized version.
+
+Rules:
+- Keep ALL original requirements; never invent new ones.
+- Organize under these headings: "Role Summary", "Required Skills", "Nice-to-Have Skills", "Responsibilities", "Qualifications".
+- Use concise bullet points.
+- Mention explicit years of experience and education only if present in the original.
+- Output plain text only, no markdown code fences, no commentary.
+
+RAW JOB DESCRIPTION:
+{jd}"""
+                }
+            ],
+            model="llama-3.3-70b-versatile",
+            temperature=0.4,
+            max_tokens=1200,
+        )
+        optimized = (completion.choices[0].message.content or '').strip()
+        optimized = re.sub(r'^```(?:text|markdown)?\s*', '', optimized)
+        optimized = re.sub(r'\s*```$', '', optimized)
+        return jsonify({'optimized': optimized})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/analyze', methods=['POST'])
 def analyze():
     # Validate file upload
