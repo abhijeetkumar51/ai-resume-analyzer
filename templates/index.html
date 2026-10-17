@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>ResumeLab — AI ATS Analyzer</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
 :root{
   --bg:#ece9f7;
@@ -23,7 +22,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 ::selection{background:rgba(109,77,255,.22)}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden}
+body{font-family:'Trebuchet MS','Segoe UI',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden}
 ::-webkit-scrollbar{width:11px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{border-radius:10px;background:linear-gradient(180deg,#c3b4f7,#ffb6cf);border:3px solid var(--bg)}
@@ -56,7 +55,7 @@ nav{position:sticky;top:14px;z-index:50;max-width:1120px;margin:14px auto 0;padd
 .nav-in{display:flex;align-items:center;justify-content:space-between;border-radius:22px;padding:13px 22px;
   background:rgba(246,243,255,.78);backdrop-filter:blur(18px) saturate(150%);
   box-shadow:var(--clay-sm);border:1px solid rgba(255,255,255,.65)}
-.logo{display:flex;align-items:center;gap:11px;font-family:'Outfit',sans-serif;font-weight:900;font-size:1.1rem;letter-spacing:-.01em}
+.logo{display:flex;align-items:center;gap:11px;font-family:'Trebuchet MS','Segoe UI',sans-serif;font-weight:900;font-size:1.1rem;letter-spacing:-.01em}
 .logo-mark{width:38px;height:38px;border-radius:14px;background:linear-gradient(145deg,#8f6bff,#6d4dff);
   display:grid;place-items:center;color:#fff;font-size:17px;
   box-shadow:inset 3px 3px 6px rgba(255,255,255,.4),inset -3px -4px 8px rgba(60,20,180,.5),5px 6px 16px rgba(109,77,255,.4)}
@@ -71,7 +70,7 @@ nav{position:sticky;top:14px;z-index:50;max-width:1120px;margin:14px auto 0;padd
 .kick b{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 4px rgba(34,200,184,.16);animation:blink 1.6s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-h1{font-family:'Outfit',sans-serif;font-size:clamp(2.5rem,5.6vw,4.3rem);font-weight:900;line-height:1.05;margin:24px 0 18px;letter-spacing:-.025em}
+h1{font-family:'Trebuchet MS','Segoe UI',sans-serif;font-size:clamp(2.5rem,5.6vw,4.3rem);font-weight:900;line-height:1.05;margin:24px 0 18px;letter-spacing:-.025em}
 h1 .grad{background:linear-gradient(110deg,var(--accent),var(--accent2) 55%,var(--sun));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;background-size:200%;animation:gs 6s ease infinite}
 @keyframes gs{0%,100%{background-position:0%}50%{background-position:100%}}
 h1 .sq{display:inline-block;padding:0 16px;border-radius:18px;background:var(--card);box-shadow:var(--clay-sm);animation:tilt 5s ease-in-out infinite}
@@ -82,7 +81,7 @@ h1 .sq{display:inline-block;padding:0 16px;border-radius:18px;background:var(--c
 .pills{display:flex;gap:16px;flex-wrap:wrap}
 .pill{border-radius:24px;padding:16px 24px;background:var(--card);box-shadow:var(--clay);min-width:112px;transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
 .pill:hover{transform:translateY(-6px) scale(1.05)}
-.pill .n{font-family:'Outfit',sans-serif;font-size:1.5rem;font-weight:900;color:var(--accent)}
+.pill .n{font-family:'Trebuchet MS','Segoe UI',sans-serif;font-size:1.5rem;font-weight:900;color:var(--accent)}
 .pill:nth-child(2) .n{color:var(--accent2)}.pill:nth-child(3) .n{color:var(--mint)}.pill:nth-child(4) .n{color:var(--sun)}
 .pill .l{font-size:10.5px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:3px}
 
@@ -110,7 +109,7 @@ h1 .sq{display:inline-block;padding:0 16px;border-radius:18px;background:var(--c
 .ring-fg{fill:none;stroke:url(#g1);stroke-width:13;stroke-linecap:round;stroke-dasharray:345;stroke-dashoffset:138;animation:fillring 2.2s .5s cubic-bezier(.4,0,.2,1) backwards}
 @keyframes fillring{from{stroke-dashoffset:345}to{stroke-dashoffset:138}}
 .ring-txt{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
-.ring-txt b{font-family:'Outfit',sans-serif;font-size:2rem;font-weight:900;display:block}
+.ring-txt b{font-family:'Trebuchet MS','Segoe UI',sans-serif;font-size:2rem;font-weight:900;display:block}
 .ring-txt span{font-size:9.5px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
 .demo-tags{display:flex;flex-wrap:wrap;gap:9px}
 .dtag{padding:7px 14px;border-radius:100px;font-size:12px;font-weight:800;background:#fff;box-shadow:var(--clay-sm)}
@@ -118,7 +117,7 @@ h1 .sq{display:inline-block;padding:0 16px;border-radius:18px;background:var(--c
 .mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:26px}
 .ms{border-radius:20px;padding:15px;background:linear-gradient(145deg,#f0eafc,#e7dff9);box-shadow:var(--clay-in);text-align:center;transition:box-shadow .3s}
 .ms:hover{box-shadow:var(--clay-in-deep)}
-.ms b{font-family:'Outfit',sans-serif;font-size:1.2rem;font-weight:900;display:block}
+.ms b{font-family:'Trebuchet MS','Segoe UI',sans-serif;font-size:1.2rem;font-weight:900;display:block}
 .ms span{font-size:10px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 
 /* reveal on scroll */
@@ -127,7 +126,7 @@ h1 .sq{display:inline-block;padding:0 16px;border-radius:18px;background:var(--c
 
 /* ═══ FORM ═══ */
 .form-sec{position:relative;z-index:1;max-width:1120px;margin:64px auto 0;padding:0 24px}
-.sec-title{font-family:'Outfit',sans-serif;font-size:1.55rem;font-weight:900;margin-bottom:26px;display:flex;align-items:center;gap:13px}
+.sec-title{font-family:'Trebuchet MS','Segoe UI',sans-serif;font-size:1.55rem;font-weight:900;margin-bottom:26px;display:flex;align-items:center;gap:13px}
 .sec-title .num{width:40px;height:40px;border-radius:15px;background:var(--card);box-shadow:var(--clay-sm);display:grid;place-items:center;font-size:1.05rem;color:var(--accent)}
 .sec-title small{font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.02em;margin-left:4px}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:28px}
@@ -146,19 +145,19 @@ h1 .sq{display:inline-block;padding:0 16px;border-radius:18px;background:var(--c
 .cdoc-lines i{display:block;height:5px;border-radius:4px;background:rgba(255,255,255,.55);margin-bottom:7px;box-shadow:inset 1px 1px 2px rgba(255,255,255,.4)}
 .cdoc-lines i:nth-child(2){width:70%}.cdoc-lines i:nth-child(3){width:50%}
 
-.dz-t{font-family:'Outfit',sans-serif;font-size:16.5px;font-weight:800}
+.dz-t{font-family:'Trebuchet MS','Segoe UI',sans-serif;font-size:16.5px;font-weight:800}
 .dz-s{font-size:12.5px;color:var(--muted);font-weight:700;margin-top:5px}
 .file-ok{display:none;margin-top:15px;width:max-content;margin-left:auto;margin-right:auto;align-items:center;gap:8px;border-radius:100px;padding:8px 18px;
   font-size:13px;font-weight:800;color:var(--mint);background:#fff;box-shadow:var(--clay-sm);animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
 
 .jd-box{border-radius:32px;padding:26px;background:linear-gradient(145deg,#e9e2f9,#f2eefe);box-shadow:var(--clay-in-deep)}
 .jd-box textarea{width:100%;height:212px;border:none;outline:none;resize:vertical;background:transparent;color:var(--ink);
-  font-family:'Nunito',sans-serif;font-size:14.5px;font-weight:600;line-height:1.78}
+  font-family:'Trebuchet MS','Segoe UI',sans-serif;font-size:14.5px;font-weight:600;line-height:1.78}
 .jd-box textarea::placeholder{color:#a79fc7}
 .jd-actions{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
 .jd-count{font-size:11px;font-weight:900;color:var(--muted)}
 .opt-btn{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;border-radius:15px;padding:10px 19px;
-  font-family:'Outfit',sans-serif;font-size:13px;font-weight:800;color:#fff;
+  font-family:'Trebuchet MS','Segoe UI',sans-serif;font-size:13px;font-weight:800;color:#fff;
   background:linear-gradient(145deg,#ff9bbc,#ff7eb0 60%,#f75e9d);
   box-shadow:inset 3px 3px 7px rgba(255,255,255,.45),inset -3px -4px 9px rgba(190,50,110,.5),6px 8px 22px rgba(255,126,176,.45);
   transition:all .3s cubic-bezier(.34,1.56,.64,1)}
@@ -171,8 +170,8 @@ h1 .sq{display:inline-block;padding:0 16px;border-radius:18px;background:var(--c
 .jd-hint{font-size:11.5px;font-weight:900;color:var(--mint);margin-top:9px;display:none;animation:pop .4s ease}
 .jd-hint.show{display:block}
 
-.cta{width:100%;margin-top:32px;padding:22px;border:none;border-radius:28px;cursor:pointer;position:relative;overflow:hidden;
-  font-family:'Outfit',sans-serif;font-size:17.5px;font-weight:900;letter-spacing:.02em;color:#fff;
+.cta{width:100%;margin-top:20px;padding:22px;border:none;border-radius:28px;cursor:pointer;position:relative;overflow:hidden;
+  font-family:'Trebuchet MS','Segoe UI',sans-serif;font-size:17.5px;font-weight:900;letter-spacing:.02em;color:#fff;
   background:linear-gradient(145deg,#8f6bff,#6d4dff);
   box-shadow:inset 4px 4px 10px rgba(255,255,255,.35),inset -5px -6px 14px rgba(50,15,170,.55),11px 15px 40px rgba(109,77,255,.5);
   display:flex;align-items:center;justify-content:center;gap:11px;transition:all .35s cubic-bezier(.34,1.56,.64,1)}
@@ -185,6 +184,14 @@ h1 .sq{display:inline-block;padding:0 16px;border-radius:18px;background:var(--c
 
 #err{display:none;margin-top:18px;border-radius:22px;padding:15px 20px;color:#e13a7c;font-size:13.5px;font-weight:800;
   background:linear-gradient(145deg,#ffe4ee,#ffd9e6);box-shadow:inset 4px 4px 10px #f2c4d6,inset -4px -4px 10px #fff,7px 7px 20px rgba(225,58,124,.15);animation:pop .35s ease}
+
+.privacy-note{display:flex;align-items:flex-start;gap:12px;margin-top:22px;padding:16px 19px;border:1px solid rgba(109,77,255,.14);
+  border-radius:20px;background:rgba(255,255,255,.58);box-shadow:var(--clay-sm);color:var(--ink2);font-size:12px;line-height:1.65}
+.privacy-note input{width:18px;height:18px;flex:0 0 auto;margin-top:2px;accent-color:var(--accent);cursor:pointer}
+.privacy-note label{cursor:pointer}
+.privacy-note strong{color:var(--ink)}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid rgba(109,77,255,.58);outline-offset:4px}
+.dropzone input:focus-visible{outline:3px solid rgba(109,77,255,.72);outline-offset:-8px}
 
 /* ═══ LOADER ═══ */
 #loader{display:none;text-align:center;padding:74px 20px}
@@ -203,7 +210,7 @@ h1 .sq{display:inline-block;padding:0 16px;border-radius:18px;background:var(--c
 #results{display:none;margin-top:76px}
 .res-title{text-align:center;margin-bottom:34px;animation:fu .7s ease}
 @keyframes fu{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
-.res-title h2{font-family:'Outfit',sans-serif;font-size:2.1rem;font-weight:900}
+.res-title h2{font-family:'Trebuchet MS','Segoe UI',sans-serif;font-size:2.1rem;font-weight:900}
 .res-title p{color:var(--muted);font-weight:700;font-size:13px;margin-top:7px}
 .res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(295px,1fr));gap:26px}
 
@@ -212,7 +219,7 @@ h1 .sq{display:inline-block;padding:0 16px;border-radius:18px;background:var(--c
 .score-card .ring-wrap{width:166px;height:166px}
 .score-card .ring-wrap b{font-size:2.5rem}
 .score-info{flex:1;min-width:255px}
-.score-info h3{font-family:'Outfit',sans-serif;font-size:1.55rem;font-weight:900;margin-bottom:11px}
+.score-info h3{font-family:'Trebuchet MS','Segoe UI',sans-serif;font-size:1.55rem;font-weight:900;margin-bottom:11px}
 .score-info p{color:var(--ink2);font-weight:600;font-size:14.5px;line-height:1.9;max-width:545px}
 
 .rcard{border-radius:32px;padding:29px;background:var(--card);box-shadow:var(--clay);
@@ -232,6 +239,27 @@ h1 .sq{display:inline-block;padding:0 16px;border-radius:18px;background:var(--c
 
 footer{text-align:center;padding:40px;color:var(--muted);font-size:13px;font-weight:800;position:relative;z-index:1}
 footer b{color:var(--accent)}
+
+@media(max-width:600px){
+  nav{padding:0 16px}
+  .hero,.form-sec{padding-left:18px;padding-right:18px}
+  .hero{gap:26px}
+  .pills{gap:10px}
+  .pill{min-width:calc(50% - 5px);padding:13px 16px}
+  .panel{padding:28px 22px;border-radius:28px}
+  .score-demo{gap:12px}
+  .ring-wrap{width:112px;height:112px}
+  .ring-wrap svg{width:112px;height:112px}
+  .sec-title{flex-wrap:wrap;font-size:1.35rem}
+  .sec-title small{width:100%;margin-left:53px;margin-top:-10px}
+  .dropzone{padding:36px 18px}
+  .jd-box{padding:20px}
+  .jd-actions{align-items:flex-start;gap:12px;flex-wrap:wrap}
+  .score-card{padding:26px;gap:22px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
 </style>
 </head>
 <body>
@@ -241,26 +269,26 @@ footer b{color:var(--accent)}
 
 <!-- NAV -->
 <nav><div class="nav-in">
-  <div class="logo"><span class="logo-mark">⚡</span>ResumeLab</div>
+  <div class="logo"><span class="logo-mark" aria-hidden="true">⚡</span>ResumeLab</div>
   <div class="nav-badge">AI · ATS Ready</div>
 </div></nav>
 
 <!-- HERO -->
 <section class="hero">
   <div>
-    <div class="kick"><b></b>Powered by Groq AI</div>
+    <div class="kick"><b></b>Powered by Gemini AI</div>
     <h1>Nail Your Next Interview with <span class="sq">ATS</span> <span class="grad">Resume Score</span></h1>
     <p class="lead">Drop in your resume, paste the job description — let AI grade your match with a full skill-gap report. Messy description? One click ✨ <b>Optimize Prompt</b> fixes it.</p>
     <div class="pills">
-      <div class="pill"><div class="n" id="cnt">0+</div><div class="l">Analyzed</div></div>
-      <div class="pill"><div class="n">&lt;5s</div><div class="l">Speed</div></div>
-      <div class="pill"><div class="n">7</div><div class="l">Metrics</div></div>
-      <div class="pill"><div class="n">100%</div><div class="l">Free</div></div>
+      <div class="pill"><div class="n">0</div><div class="l">Files stored</div></div>
+      <div class="pill"><div class="n">6</div><div class="l">Report insights</div></div>
+      <div class="pill"><div class="n">PDF</div><div class="l">Resume format</div></div>
+      <div class="pill"><div class="n">AI</div><div class="l">On demand</div></div>
     </div>
   </div>
   <div class="tilt-zone">
     <div class="panel" id="tiltPanel">
-      <div class="panel-tag">Live Demo</div>
+      <div class="panel-tag">Example report</div>
       <div class="score-demo">
         <div class="ring-wrap">
           <svg width="138" height="138" viewBox="0 0 138 138">
@@ -287,24 +315,24 @@ footer b{color:var(--accent)}
 </section>
 
 <!-- FORM -->
-<section class="form-sec">
+<section class="form-sec" aria-label="Resume analysis">
   <form id="form">
     <div class="sec-title rv"><span class="num">1</span>Upload & Describe <small>— takes 30 seconds</small></div>
     <div class="two-col rv">
       <div>
         <div class="dropzone" id="dz">
-          <input type="file" id="rf" accept=".pdf" required/>
+          <input type="file" id="rf" accept="application/pdf,.pdf" aria-label="Choose a resume PDF" required/>
           <div class="cdoc">
             <div class="cdoc-body"><div class="cdoc-fold"></div><div class="cdoc-lines"><i></i><i></i><i></i></div></div>
           </div>
           <div class="dz-t">Drop your resume PDF</div>
           <div class="dz-s">or click to browse · PDF only</div>
-          <div class="file-ok" id="fi"><span>✓</span><span id="fn"></span></div>
+          <div class="file-ok" id="fi"><span aria-hidden="true">✓</span><span id="fn">PDF selected</span></div>
         </div>
       </div>
       <div>
         <div class="jd-box">
-          <textarea id="jd" placeholder="Paste the job description here…&#10;&#10;Tip: use ✨ Optimize Prompt to auto-structure it for the sharpest analysis." required></textarea>
+          <textarea id="jd" aria-label="Job description" placeholder="Paste the job description here…&#10;&#10;Tip: use ✨ Optimize Prompt to auto-structure it for the sharpest analysis." required></textarea>
           <div class="jd-actions">
             <div class="jd-count"><span id="jc">0</span> characters</div>
             <button type="button" class="opt-btn" id="optBtn" title="Rewrite the job description into a structured, ATS-optimized prompt"><span class="spin"></span><span id="optTxt">✨ Optimize Prompt</span></button>
@@ -313,13 +341,17 @@ footer b{color:var(--accent)}
         </div>
       </div>
     </div>
+    <div class="privacy-note">
+      <input type="checkbox" id="consent" required/>
+      <label for="consent"><strong>Privacy & AI processing:</strong> Your PDF is processed in memory and not retained by this app. Before analysis, email addresses, phone numbers, street addresses, and links are removed. This is not full anonymization—your name and other resume details may remain. The remaining resume text and job description are sent to Google Gemini to generate your result. Continue only if you are comfortable sharing that text with the AI provider.</label>
+    </div>
     <button type="submit" class="cta" id="btn"><span>⚡</span><span id="bt">Analyze My Resume</span></button>
-    <div id="err"></div>
+    <div id="err" role="alert" aria-live="assertive"></div>
   </form>
 
   <div id="loader">
     <div class="squish"><div class="sq-core"></div><div class="sq-orb"></div></div>
-    <p style="font-family:'Outfit';font-weight:900;font-size:16px">Analyzing your resume with AI…</p>
+    <p style="font-family:'Trebuchet MS','Segoe UI',sans-serif;font-weight:900;font-size:16px">Analyzing your resume with AI…</p>
     <div class="lsteps">
       <div class="lstep" id="s1">◆ Extracting resume content…</div>
       <div class="lstep" id="s2">◆ Matching with job requirements…</div>
@@ -328,7 +360,7 @@ footer b{color:var(--accent)}
     </div>
   </div>
 
-  <div id="results">
+  <div id="results" aria-live="polite">
     <div class="res-title"><h2>📊 Your ATS Report</h2><p>AI-powered breakdown of your resume vs. the job description</p></div>
     <div class="res-grid">
       <div class="score-card">
@@ -350,7 +382,7 @@ footer b{color:var(--accent)}
   </div>
 </section>
 
-<footer>Crafted with <b>♥</b> — Flask · Groq AI · Claymorphism</footer>
+<footer>Crafted with <b>♥</b> — Flask · Gemini AI · Claymorphism</footer>
 
 <script>
 // Cursor glow
@@ -372,16 +404,29 @@ document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 const dz=document.getElementById('dz'),rf=document.getElementById('rf'),fi=document.getElementById('fi'),fn=document.getElementById('fn');
 dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('on')});
 dz.addEventListener('dragleave',()=>dz.classList.remove('on'));
-dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('on');if(e.dataTransfer.files[0]){rf.files=e.dataTransfer.files;show(e.dataTransfer.files[0].name)}});
-rf.addEventListener('change',()=>rf.files[0]&&show(rf.files[0].name));
-function show(n2){fn.textContent=n2.length>28?n2.slice(0,25)+'…':n2;fi.style.display='flex'}
+dz.addEventListener('drop',e=>{
+  e.preventDefault();dz.classList.remove('on');
+  const file=e.dataTransfer.files[0];
+  if(!file)return;
+  if(!validResume(file)){rf.value='';return}
+  rf.files=e.dataTransfer.files;show();
+});
+rf.addEventListener('change',()=>{
+  if(!rf.files[0])return;
+  if(validResume(rf.files[0]))show();
+  else rf.value='';
+});
+function validResume(file){
+  if(!file.name.toLowerCase().endsWith('.pdf')){fi.style.display='none';showError('Please choose a PDF resume.');return false}
+  if(file.size>16*1024*1024){fi.style.display='none';showError('Your PDF must be smaller than 16 MB.');return false}
+  err.style.display='none';return true
+}
+function show(){fn.textContent='PDF selected';fi.style.display='flex'}
+function showError(message){err.textContent='⚠️ '+message;err.style.display='block'}
 
 // JD counter
 const jd=document.getElementById('jd');
 jd.addEventListener('input',()=>{document.getElementById('jc').textContent=jd.value.length;document.getElementById('jdHint').classList.remove('show')});
-
-// Counter
-let n=0;const cel=document.getElementById('cnt');const ti=setInterval(()=>{n++;cel.textContent=n+'+';if(n>=47)clearInterval(ti)},35);
 
 // Loader steps
 const sids=['s1','s2','s3','s4'],dels=[400,1300,2200,3100];let ts=[];
@@ -390,17 +435,19 @@ function clearSteps(){ts.forEach(clearTimeout);ts=[];sids.forEach(id=>document.g
 
 // Optimize prompt
 const optBtn=document.getElementById('optBtn'),optTxt=document.getElementById('optTxt'),jdHint=document.getElementById('jdHint'),err=document.getElementById('err');
+const consent=document.getElementById('consent');
 optBtn.addEventListener('click',async()=>{
   const text=jd.value.trim();
   if(!text){jd.focus();return}
+  if(!consent.checked){consent.focus();err.textContent='Please confirm the privacy and AI processing notice first.';err.style.display='block';return}
   optBtn.disabled=true;optBtn.classList.add('busy');optTxt.textContent='Optimizing…';jdHint.classList.remove('show');
   try{
-    const r=await fetch('/optimize',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({job_description:text})});
+    const r=await fetch('/optimize',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({job_description:text,consent:true})});
     const d=await r.json();
     if(!r.ok)throw new Error(d.error||'Optimization failed');
     jd.value=d.optimized;document.getElementById('jc').textContent=jd.value.length;
     jdHint.classList.add('show');
-  }catch(ex){err.textContent='⚠️ '+ex.message;err.style.display='block';setTimeout(()=>err.style.display='none',5000);}
+  }catch(ex){showError(ex.message);}
   finally{optBtn.disabled=false;optBtn.classList.remove('busy');optTxt.textContent='✨ Optimize Prompt'}
 });
 
@@ -410,13 +457,13 @@ document.getElementById('form').addEventListener('submit',async e=>{
   const btn=document.getElementById('btn'),bt=document.getElementById('bt'),loader=document.getElementById('loader'),results=document.getElementById('results');
   err.style.display='none';results.style.display='none';loader.style.display='block';
   btn.disabled=true;bt.textContent='Analyzing…';clearSteps();startSteps();
-  const fd=new FormData();fd.append('resume',rf.files[0]);fd.append('job_description',jd.value);
+  const fd=new FormData();fd.append('resume',rf.files[0]);fd.append('job_description',jd.value);fd.append('consent',String(consent.checked));
   jdHint.classList.remove('show');
   try{
     const r=await fetch('/analyze',{method:'POST',body:fd}),d=await r.json();
     if(!r.ok)throw new Error(d.error||'Server error');
     render(d);
-  }catch(ex){err.textContent='⚠️ '+ex.message;err.style.display='block';}
+  }catch(ex){showError(ex.message);}
   finally{loader.style.display='none';btn.disabled=false;bt.textContent='Analyze My Resume';}
 });
 
@@ -430,13 +477,21 @@ function render(d){
   const ct=setInterval(()=>{cur=Math.min(cur+2,s);sv.textContent=cur+'%';if(cur>=s)clearInterval(ct)},18);
   document.getElementById('sl2').textContent=s>=70?'🎉 Excellent Match!':s>=45?'📈 Room to Improve':'⚠️ Needs Work';
   document.getElementById('sm').textContent=d.summary||'';
-  mkT('ms',d.matching_skills||[],'ok');mkT('xs',d.missing_skills||[],'no');
-  mkL('str',d.strengths||[],'✅');mkL('wk',d.weaknesses||[],'⚠️');mkL('sg',d.suggestions||[],'💡');
+  mkT('ms',Array.isArray(d.matching_skills)?d.matching_skills:[],'ok');mkT('xs',Array.isArray(d.missing_skills)?d.missing_skills:[],'no');
+  mkL('str',Array.isArray(d.strengths)?d.strengths:[],'✅');mkL('wk',Array.isArray(d.weaknesses)?d.weaknesses:[],'⚠️');mkL('sg',Array.isArray(d.suggestions)?d.suggestions:[],'💡');
   const res=document.getElementById('results');res.style.display='block';
   setTimeout(()=>res.scrollIntoView({behavior:'smooth',block:'start'}),100);
 }
-function mkT(id,a,c){document.getElementById(id).innerHTML=a.length?a.map((x,i)=>`<span class="tg ${c}" style="animation-delay:${i*.06}s">${x}</span>`).join(''):'<span class="tg warn">None identified</span>';}
-function mkL(id,a,ic){document.getElementById(id).innerHTML=a.length?a.map((x,i)=>`<li style="animation-delay:${i*.07}s"><span>${ic}</span>${x}</li>`).join(''):'<li><span>—</span>None identified</li>';}
+function mkT(id,a,c){
+  const target=document.getElementById(id);target.replaceChildren();
+  if(!a.length){const tag=document.createElement('span');tag.className='tg warn';tag.textContent='None identified';target.append(tag);return}
+  a.forEach((value,i)=>{const tag=document.createElement('span');tag.className=`tg ${c}`;tag.style.animationDelay=`${i*.06}s`;tag.textContent=String(value);target.append(tag)});
+}
+function mkL(id,a,ic){
+  const target=document.getElementById(id);target.replaceChildren();
+  if(!a.length){const item=document.createElement('li');item.textContent='— None identified';target.append(item);return}
+  a.forEach((value,i)=>{const item=document.createElement('li'),icon=document.createElement('span');item.style.animationDelay=`${i*.07}s`;icon.textContent=ic;item.append(icon,document.createTextNode(String(value)));target.append(item)});
+}
 </script>
 </body>
 </html>
