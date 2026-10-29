@@ -93,10 +93,19 @@ Open **http://localhost:5000**
 
 ## 🔄 CI/CD Pipeline
 
-On every push to `main`, GitHub Actions automatically:
-1. Installs dependencies
-2. Builds the Docker image
-3. Pushes to Docker Hub → deployed live on **Render**
+Pull requests run the unit tests and build the Docker image. A push to `main` runs the same checks, then publishes both `latest` and a commit-SHA image tag to Docker Hub. Configure the repository secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` with a Docker Hub access token that can push to `abhijeetchy51/ai-resume-analyser`.
+
+Render deploys from the repository using `render.yaml`. Connect the repository in Render, set `GEMINI_API_KEY` in the Render service environment, and configure the service's health check path as `/health` (the Blueprint already declares it). The app binds to Render's `PORT` environment variable. No API key is stored in the repository or image.
+
+## 🧰 INT333 DevOps starter
+
+- `render.yaml` describes the Docker web service and its `/health` check.
+- `terraform/` is reserved for external infrastructure managed with Terraform. Render's hosted service does not expose its machine for SSH or host configuration.
+- `ansible/` includes a playbook to check the public Render URL from a control machine or CI runner. Set `SERVICE_URL` first.
+- `puppet/` shows a package-management example for a Linux monitoring host that you administer yourself; it does not target Render.
+- `nagios/` contains an HTTP check for the public Render hostname. Configure it on a separately managed Nagios server.
+
+These tools complement Render's service-level deployment. They do not imply access to Render's underlying container host. See each folder's README for its intended use.
 
 ---
 

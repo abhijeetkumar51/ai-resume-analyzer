@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: ai-resume-analyzer
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="careerly" x1="7" y1="5" x2="41" y2="43" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#75F0DE"/>
+      <stop offset="1" stop-color="#8FA8FF"/>
+    </linearGradient>
+  </defs>
+  <path d="M24 3.5 42 13.75v20.5L24 44.5 6 34.25v-20.5L24 3.5Z" fill="#102235" stroke="url(#careerly)" stroke-width="2"/>
+  <path d="M29.5 15.4a11.2 11.2 0 1 0 0 17.2" stroke="url(#careerly)" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="m18.7 25.5 4 4 9.1-10.2" stroke="url(#careerly)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

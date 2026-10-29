@@ -33,3 +33,13 @@ Thumbs.db
 dist/
 build/
 *.egg-info/
+
+# ─── Terraform state and local overrides ───
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+crash.log

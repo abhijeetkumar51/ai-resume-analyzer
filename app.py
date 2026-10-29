@@ -171,6 +171,12 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/health', methods=['GET'])
+def health():
+    """Report that the Flask process is ready to serve HTTP requests."""
+    return jsonify({'status': 'ok'}), 200
+
+
 @app.route('/optimize', methods=['POST'])
 def optimize_prompt():
     """Rewrite a raw job description into a structured, ATS-friendly prompt."""
@@ -250,4 +256,8 @@ def analyze():
 
 
 if __name__ == '__main__':
-    app.run(host=os.environ.get('HOST', '127.0.0.1'), port=5000, debug=False)
+    app.run(
+        host=os.environ.get('HOST', '127.0.0.1'),
+        port=int(os.environ.get('PORT', '5000')),
+        debug=False,
+    )
