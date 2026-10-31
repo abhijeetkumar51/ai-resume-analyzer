@@ -766,6 +766,19 @@
             <button type="button" class="button button-quiet" id="new-analysis">Start a new analysis</button>
           </div>
         </div>
+        <div class="result-panel" id="panel-skills">
+          <p class="panel-intro">Skills are grouped as they were identified in your analysis.</p>
+          <div class="skills-grid">
+            <article class="result-card matching">
+              <h3><span class="result-icon" aria-hidden="true">✓</span>Matching skills</h3>
+              <div class="tag-list" id="matching-skills"></div>
+            </article>
+            <article class="result-card missing">
+              <h3><span class="result-icon" aria-hidden="true">↗</span>Skills to develop</h3>
+              <div class="tag-list" id="missing-skills"></div>
+            </article>
+          </div>
+        </div>
         <div class="result-panel" id="panel-overview">
           <div class="results-grid">
             <article class="result-card score-card interactive-depth">
@@ -787,19 +800,6 @@
             <article class="result-card summary wide">
               <h3><span class="result-icon" aria-hidden="true">◎</span>Overall summary</h3>
               <p id="summary-text"></p>
-            </article>
-          </div>
-        </div>
-        <div class="result-panel" id="panel-skills">
-          <p class="panel-intro">Skills are grouped as they were identified in your analysis.</p>
-          <div class="skills-grid">
-            <article class="result-card matching">
-              <h3><span class="result-icon" aria-hidden="true">✓</span>Matching skills</h3>
-              <div class="tag-list" id="matching-skills"></div>
-            </article>
-            <article class="result-card missing">
-              <h3><span class="result-icon" aria-hidden="true">↗</span>Skills to develop</h3>
-              <div class="tag-list" id="missing-skills"></div>
             </article>
           </div>
         </div>

@@ -11,6 +11,7 @@ class ReportLayoutParser(HTMLParser):
     def __init__(self):
         super().__init__()
         self.visible_panels = {}
+        self.panel_order = []
         self.tab_count = 0
 
     def handle_starttag(self, tag, attrs):
@@ -18,6 +19,7 @@ class ReportLayoutParser(HTMLParser):
         panel_id = attributes.get('id')
         if panel_id in self.panel_ids:
             self.visible_panels[panel_id] = 'hidden' not in attributes
+            self.panel_order.append(panel_id)
         if attributes.get('role') == 'tab':
             self.tab_count += 1
 
@@ -47,6 +49,7 @@ class ReportLayoutTests(unittest.TestCase):
         self.assertEqual(set(parser.visible_panels), parser.panel_ids)
         self.assertTrue(all(parser.visible_panels.values()))
         self.assertEqual(parser.tab_count, 0)
+        self.assertEqual(parser.panel_order[0], 'panel-skills')
 
 
 class GroqModelTests(unittest.TestCase):
