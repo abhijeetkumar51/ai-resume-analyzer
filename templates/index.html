@@ -1270,6 +1270,7 @@
           : 0;
         const matchingCount = countItems(data.matching_skills);
         const missingCount = countItems(data.missing_skills);
+        const suggestionsCount = countItems(data.suggestions);
         document.getElementById('overview-matched').textContent = String(matchingCount);
         document.getElementById('overview-missing').textContent = String(missingCount);
         document.getElementById('overview-actions').textContent = String(suggestionsCount);
