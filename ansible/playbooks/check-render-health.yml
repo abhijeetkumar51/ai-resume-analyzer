@@ -1,0 +1,23 @@
+---
+- name: Check the public Render service
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    service_url: "{{ lookup('env', 'SERVICE_URL') | default('https://YOUR-SERVICE.onrender.com', true) }}"
+  tasks:
+    - name: Require a configured service URL
+      ansible.builtin.assert:
+        that:
+          - service_url is match('^https://')
+        fail_msg: Set SERVICE_URL to the public HTTPS URL of your deployed Render service.
+    - name: Check application health endpoint
+      ansible.builtin.uri:
+        url: "{{ service_url | regex_replace('/+$', '') }}/health"
+        method: GET
+        status_code: 200
+        return_content: true
+      register: health
+    - name: Show health response
+      ansible.builtin.debug:
+        var: health.json
