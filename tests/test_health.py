@@ -1,7 +1,25 @@
 import unittest
+from html.parser import HTMLParser
 from unittest.mock import Mock, patch
 
 from app import GROQ_MODEL, app, call_groq
+
+
+class ReportLayoutParser(HTMLParser):
+    panel_ids = {'panel-overview', 'panel-skills', 'panel-strengths', 'panel-suggestions'}
+
+    def __init__(self):
+        super().__init__()
+        self.visible_panels = {}
+        self.tab_count = 0
+
+    def handle_starttag(self, tag, attrs):
+        attributes = dict(attrs)
+        panel_id = attributes.get('id')
+        if panel_id in self.panel_ids:
+            self.visible_panels[panel_id] = 'hidden' not in attributes
+        if attributes.get('role') == 'tab':
+            self.tab_count += 1
 
 
 class HealthEndpointTests(unittest.TestCase):
@@ -17,6 +35,18 @@ class HealthEndpointTests(unittest.TestCase):
         self.assertEqual(data.get('status'), 'ok')
         self.assertIn('ai_configured', data)
         self.assertEqual(response.headers['Cache-Control'], 'no-store')
+
+
+class ReportLayoutTests(unittest.TestCase):
+    def test_analysis_sections_are_visible_without_tabs(self):
+        response = app.test_client().get('/')
+        parser = ReportLayoutParser()
+        parser.feed(response.get_data(as_text=True))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(set(parser.visible_panels), parser.panel_ids)
+        self.assertTrue(all(parser.visible_panels.values()))
+        self.assertEqual(parser.tab_count, 0)
 
 
 class GroqModelTests(unittest.TestCase):

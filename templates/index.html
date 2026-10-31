@@ -349,17 +349,12 @@
     .results-heading h2 { margin: 0; font-size: clamp(1.45rem, 3vw, 1.9rem); letter-spacing: -.04em; }
     .results-heading p { margin: 5px 0 0; color: var(--muted); font-size: .86rem; }
     .results-actions { display: flex; flex: 0 0 auto; gap: 9px; }
-    .results-tabs { display: flex; gap: 7px; overflow-x: auto; margin-bottom: 16px; padding: 5px; border: 1px solid var(--border); border-radius: 14px; background: rgba(12, 23, 39, .82); scrollbar-width: thin; }
-    .results-tab { display: inline-flex; min-height: 40px; flex: 0 0 auto; align-items: center; gap: 8px; padding: 8px 13px; border: 1px solid transparent; border-radius: 9px; color: var(--muted); background: transparent; cursor: pointer; font-size: .82rem; font-weight: 650; transition: color .18s ease, background .18s ease, border-color .18s ease; }
-    .results-tab:hover { color: var(--text); background: rgba(255,255,255,.035); }
-    .results-tab[aria-selected="true"] { border-color: rgba(85, 225, 208, .2); color: var(--teal); background: rgba(85, 225, 208, .09); }
-    .tab-count { min-width: 20px; padding: 1px 5px; border-radius: 999px; color: var(--muted); background: rgba(255,255,255,.07); font-size: .68rem; text-align: center; }
-    .result-panel[hidden] { display: none; }
     .result-panel { animation: enter .25s ease both; }
+    .result-panel + .result-panel { margin-top: 22px; }
     .results-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
     .result-card { position: relative; min-width: 0; padding: 21px; border: 1px solid var(--border); border-radius: 16px; background: rgba(16, 27, 44, .85); box-shadow: 0 10px 24px rgba(0, 0, 0, .12); }
-    .result-panel:not([hidden]) .result-card { animation: enter .38s ease both; }
-    .result-panel:not([hidden]) .result-card:nth-child(2) { animation-delay: .06s; }
+    .result-panel .result-card { animation: enter .38s ease both; }
+    .result-panel .result-card:nth-child(2) { animation-delay: .06s; }
     .result-card.interactive-depth:hover { border-color: #3a526e; box-shadow: 0 18px 34px rgba(0, 0, 0, .2); }
     .score-card { display: flex; grid-column: 1 / -1; align-items: center; gap: 26px; padding: 25px; background: radial-gradient(ellipse at 8% 50%, rgba(85, 225, 208, .08), transparent 50%), rgba(16, 27, 44, .9); }
     .score-card > * { position: relative; z-index: 1; transform: translateZ(20px); }
@@ -771,13 +766,7 @@
             <button type="button" class="button button-quiet" id="new-analysis">Start a new analysis</button>
           </div>
         </div>
-        <div class="results-tabs" role="tablist" aria-label="Analysis report sections">
-          <button class="results-tab" id="tab-overview" type="button" role="tab" aria-selected="true" aria-controls="panel-overview" tabindex="0">Overview</button>
-          <button class="results-tab" id="tab-skills" type="button" role="tab" aria-selected="false" aria-controls="panel-skills" tabindex="-1">Skills <span class="tab-count" id="skills-count">0</span></button>
-          <button class="results-tab" id="tab-strengths" type="button" role="tab" aria-selected="false" aria-controls="panel-strengths" tabindex="-1">Strengths <span class="tab-count" id="strengths-count">0</span></button>
-          <button class="results-tab" id="tab-suggestions" type="button" role="tab" aria-selected="false" aria-controls="panel-suggestions" tabindex="-1">Next steps <span class="tab-count" id="suggestions-count">0</span></button>
-        </div>
-        <div class="result-panel" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="0">
+        <div class="result-panel" id="panel-overview">
           <div class="results-grid">
             <article class="result-card score-card interactive-depth">
               <div class="score-ring" role="img" id="score-ring" aria-label="ATS score">
@@ -801,7 +790,7 @@
             </article>
           </div>
         </div>
-        <div class="result-panel" id="panel-skills" role="tabpanel" aria-labelledby="tab-skills" tabindex="0" hidden>
+        <div class="result-panel" id="panel-skills">
           <p class="panel-intro">Skills are grouped as they were identified in your analysis.</p>
           <div class="skills-grid">
             <article class="result-card matching">
@@ -814,7 +803,7 @@
             </article>
           </div>
         </div>
-        <div class="result-panel" id="panel-strengths" role="tabpanel" aria-labelledby="tab-strengths" tabindex="0" hidden>
+        <div class="result-panel" id="panel-strengths">
           <p class="panel-intro">Review the positive signals and the areas the analysis identified for improvement.</p>
           <div class="skills-grid">
             <article class="result-card strengths">
@@ -827,7 +816,7 @@
             </article>
           </div>
         </div>
-        <div class="result-panel" id="panel-suggestions" role="tabpanel" aria-labelledby="tab-suggestions" tabindex="0" hidden>
+        <div class="result-panel" id="panel-suggestions">
           <p class="panel-intro">Practical suggestions from your analysis to help you strengthen this application.</p>
           <article class="result-card suggestions">
             <h3><span class="result-icon" aria-hidden="true">✧</span>Suggested next steps</h3>
@@ -952,7 +941,6 @@
       const results = document.getElementById('results');
       const analyzeLabel = document.getElementById('analyze-label');
       const formNote = document.getElementById('form-note');
-      const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
       let isAnalyzing = false;
       let isOptimizing = false;
       let scoreAnimationFrame = 0;
@@ -1239,30 +1227,6 @@
         });
       }
 
-      function selectTab(tab, moveFocus) {
-        tabs.forEach(candidate => {
-          const selected = candidate === tab;
-          candidate.setAttribute('aria-selected', String(selected));
-          candidate.tabIndex = selected ? 0 : -1;
-          document.getElementById(candidate.getAttribute('aria-controls')).hidden = !selected;
-        });
-        if (moveFocus) tab.focus();
-      }
-
-      tabs.forEach((tab, index) => {
-        tab.addEventListener('click', () => selectTab(tab, false));
-        tab.addEventListener('keydown', event => {
-          let nextIndex;
-          if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
-          else if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
-          else if (event.key === 'Home') nextIndex = 0;
-          else if (event.key === 'End') nextIndex = tabs.length - 1;
-          else return;
-          event.preventDefault();
-          selectTab(tabs[nextIndex], true);
-        });
-      });
-
       function renderResults(data) {
         const score = data.ats_score;
         if (typeof score !== 'number' || !Number.isFinite(score) || score < 0 || score > 100) {
@@ -1306,15 +1270,9 @@
           : 0;
         const matchingCount = countItems(data.matching_skills);
         const missingCount = countItems(data.missing_skills);
-        const strengthsCount = countItems(data.strengths);
-        const suggestionsCount = countItems(data.suggestions);
         document.getElementById('overview-matched').textContent = String(matchingCount);
         document.getElementById('overview-missing').textContent = String(missingCount);
         document.getElementById('overview-actions').textContent = String(suggestionsCount);
-        document.getElementById('skills-count').textContent = String(matchingCount + missingCount);
-        document.getElementById('strengths-count').textContent = String(strengthsCount);
-        document.getElementById('suggestions-count').textContent = String(suggestionsCount);
-        selectTab(document.getElementById('tab-overview'), false);
         results.classList.add('visible');
         updateSteps();
         try { if (roundedScore >= 70 && window.__fireConfetti) window.__fireConfetti(); } catch(e) {}
@@ -1344,7 +1302,7 @@
         ['matching-skills', 'missing-skills', 'strengths', 'weaknesses', 'suggestions'].forEach(id => {
           document.getElementById(id).replaceChildren();
         });
-        ['overview-matched', 'overview-missing', 'overview-actions', 'skills-count', 'strengths-count', 'suggestions-count'].forEach(id => {
+        ['overview-matched', 'overview-missing', 'overview-actions'].forEach(id => {
           document.getElementById(id).textContent = '0';
         });
         document.getElementById('score-value').textContent = '—';
@@ -1354,7 +1312,6 @@
         document.getElementById('summary-score').textContent = '';
         document.getElementById('summary-text').textContent = '';
         results.classList.remove('visible');
-        selectTab(document.getElementById('tab-overview'), false);
         clearError();
         updateSteps();
         document.getElementById('workspace').scrollIntoView({
