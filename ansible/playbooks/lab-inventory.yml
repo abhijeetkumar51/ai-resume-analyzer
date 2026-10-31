@@ -3,8 +3,9 @@ all:
     monitoring:
       hosts:
         resume_analyzer_monitoring:
-          ansible_connection: community.docker.docker
+          ansible_connection: community.docker.docker_api
           ansible_host: resume-analyzer-monitoring
+          ansible_docker_host: unix:///var/run/docker.sock
     local_checks:
       hosts:
         localhost:
