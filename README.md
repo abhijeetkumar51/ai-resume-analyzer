@@ -93,7 +93,7 @@ Open **http://localhost:5000**
 
 ## 🔄 CI/CD Pipeline
 
-Pull requests run the unit tests and build the Docker image. A push to `main` runs the same checks, then publishes both `latest` and a commit-SHA image tag to Docker Hub. Configure the repository secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` with a Docker Hub access token that can push to `abhijeetchy51/ai-resume-analyser`.
+Pull requests run the unit tests and build the Docker image. A push to `main` runs the same checks, requires the repository secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN`, then logs in and publishes both `latest` and a commit-SHA image tag to Docker Hub. Set these secrets to a Docker Hub username and access token that can push to `abhijeetchy51/ai-resume-analyser`; the workflow fails with an explicit error if either secret is missing.
 
 Render deploys from the repository using `render.yaml`. Connect the repository in Render, set `GROQ_API_KEY` in the Render service environment, and configure the service's health check path as `/health` (the Blueprint already declares it). The app binds to Render's `PORT` environment variable. No API key is stored in the repository or image.
 
