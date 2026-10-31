@@ -37,6 +37,17 @@ Upload your **resume PDF** + paste a **job description** → Get instant AI anal
 
 ---
 
+## Academic Submission Report
+
+The current INT333 project report is available in both PDF and editable Word formats:
+
+- [Project report (PDF)](static/AI_Resume_Analyzer_Project_Report.pdf)
+- [Editable project report (Word)](static/AI_Resume_Analyzer_Project_Report.docx)
+
+Fill in the student and faculty placeholders on the cover page before submission.
+
+---
+
 ## 📁 Project Structure
 
 ```
