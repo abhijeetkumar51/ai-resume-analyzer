@@ -1,3 +1,7 @@
-# Ansible starter
+# Ansible automation
 
-Run `ansible-playbook playbooks/check-render-health.yml` after setting `SERVICE_URL=https://your-service.onrender.com`. This checks the public HTTP endpoint from your machine or CI runner. It does not connect to a Render host. Requires Ansible Core with the built-in `uri` module.
+`playbooks/check-render-health.yml` checks the public Render endpoint after setting `SERVICE_URL=https://your-service.onrender.com`.
+
+The local DevOps lab uses `playbooks/configure-and-verify.yml`. Terraform creates the Docker network and containers, then runs this playbook in the Ansible controller container. The `community.docker.docker` connection plugin applies the Puppet manifest inside the monitoring container, validates and restarts Nagios, and checks the application health endpoint. This is a local lab integration, not host access to Render.
+
+Run the end-to-end workflow from the repository root with `terraform -chdir=terraform init` followed by `terraform -chdir=terraform apply`. See `README.md` for prerequisites, teardown, and Docker socket security.

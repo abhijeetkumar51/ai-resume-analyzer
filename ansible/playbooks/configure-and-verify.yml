@@ -1,0 +1,58 @@
+---
+- name: Configure and validate the monitoring container
+  hosts: monitoring
+  gather_facts: false
+  tasks:
+    - name: Apply the Puppet monitoring configuration
+      ansible.builtin.command:
+        argv:
+          - puppet
+          - apply
+          - --modulepath=/etc/puppetlabs/code/modules
+          - /etc/puppetlabs/code/modules/resume_analyzer_monitoring/manifests/init.pp
+      register: puppet_apply
+      changed_when: "'Notice: Finished catalog run' in puppet_apply.stdout"
+
+    - name: Validate Nagios configuration
+      ansible.builtin.command:
+        argv:
+          - nagios4
+          - -v
+          - /etc/nagios4/nagios.cfg
+      changed_when: false
+
+    - name: Ensure Nagios is running
+      ansible.builtin.service:
+        name: nagios4
+        state: restarted
+
+    - name: Ensure the Nagios web interface is running
+      ansible.builtin.service:
+        name: apache2
+        state: restarted
+
+- name: Verify the provisioned application endpoint
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Wait for the application health endpoint
+      ansible.builtin.uri:
+        url: http://resume-analyzer-app:5000/health
+        method: GET
+        status_code: 200
+        return_content: true
+      register: app_health
+      retries: 10
+      delay: 2
+      until: app_health.status == 200
+
+    - name: Confirm the application reports healthy
+      ansible.builtin.assert:
+        that:
+          - app_health.json.status == 'ok'
+        fail_msg: The resume analyzer did not report a healthy status.
+
+    - name: Display the verified application health response
+      ansible.builtin.debug:
+        var: app_health.json

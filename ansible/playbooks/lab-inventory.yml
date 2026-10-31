@@ -1,0 +1,11 @@
+all:
+  children:
+    monitoring:
+      hosts:
+        resume_analyzer_monitoring:
+          ansible_connection: community.docker.docker
+          ansible_host: resume-analyzer-monitoring
+    local_checks:
+      hosts:
+        localhost:
+          ansible_connection: local

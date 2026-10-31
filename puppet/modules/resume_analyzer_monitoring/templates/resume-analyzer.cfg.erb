@@ -1,0 +1,25 @@
+define command {
+  command_name    check_resume_analyzer_health
+  command_line    $USER1$/check_http -H $HOSTADDRESS$ -p 5000 -u /health -e 200 -w 5 -c 10
+}
+
+define host {
+  use                     generic-host
+  host_name               resume-analyzer-app
+  alias                   Careerly Resume Analyzer
+  address                 resume-analyzer-app
+  max_check_attempts      3
+  check_interval          1
+  retry_interval          1
+  notification_interval   0
+}
+
+define service {
+  use                     generic-service
+  host_name               resume-analyzer-app
+  service_description     Flask health endpoint
+  check_command           check_resume_analyzer_health
+  check_interval          1
+  retry_interval          1
+  max_check_attempts      3
+}

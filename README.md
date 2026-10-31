@@ -109,15 +109,23 @@ Pull requests run the unit tests and build the Docker image. A push to `main` ru
 
 Render deploys from the repository using `render.yaml`. Connect the repository in Render, set `GROQ_API_KEY` in the Render service environment, and configure the service's health check path as `/health` (the Blueprint already declares it). The app binds to Render's `PORT` environment variable. No API key is stored in the repository or image.
 
-## 🧰 INT333 DevOps starter
+## 🧰 INT333 DevOps lab
 
-- `render.yaml` describes the Docker web service and its `/health` check.
-- `terraform/` is reserved for external infrastructure managed with Terraform. Render's hosted service does not expose its machine for SSH or host configuration.
-- `ansible/` includes a playbook to check the public Render URL from a control machine or CI runner. Set `SERVICE_URL` first.
-- `puppet/` shows a package-management example for a Linux monitoring host that you administer yourself; it does not target Render.
-- `nagios/` contains an HTTP check for the public Render hostname. Configure it on a separately managed Nagios server.
+- `terraform/main.tf` uses the Docker provider to build the app, Ansible controller, and monitoring images, create an isolated network, start the containers, and invoke Ansible after provisioning.
+- `ansible/playbooks/configure-and-verify.yml` connects to the monitoring container, applies Puppet, validates/restarts Nagios and Apache, and checks `/health` on the app.
+- `puppet/modules/resume_analyzer_monitoring/` installs the Nagios HTTP plugin, manages the host/service check configuration, and ensures the monitoring services are running.
+- `nagios/` builds a local Nagios node that checks the app's health endpoint. The dashboard is bound to `127.0.0.1:8080`.
+- `render.yaml` separately describes the hosted Render web service. Render does not expose its container host to Terraform, Puppet, or Nagios.
 
-These tools complement Render's service-level deployment. They do not imply access to Render's underlying container host. See each folder's README for its intended use.
+Run the lab from PowerShell with Docker Desktop's Linux engine running:
+
+```powershell
+$env:DOCKER_HOST = 'npipe:////./pipe/dockerDesktopLinuxEngine'
+terraform -chdir=terraform init
+terraform -chdir=terraform apply
+```
+
+Open the app at `http://127.0.0.1:5000` and the local Nagios dashboard at `http://127.0.0.1:8080/nagios4/` (`nagiosadmin` / `devops-demo`, local demo only). Run `terraform -chdir=terraform destroy` to remove the lab. The Ansible controller mounts the Docker socket, which grants broad control over the local Docker host; use this only on a trusted disposable development machine and never expose the lab publicly. See the tool-specific READMEs for responsibilities and limitations.
 
 ---
 

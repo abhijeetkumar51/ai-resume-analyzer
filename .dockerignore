@@ -32,3 +32,9 @@ Thumbs.db
 
 # Logs
 *.log
+
+# DevOps tooling and local state are not part of the application or monitoring images
+.github/
+ansible/
+terraform/
+tests/
