@@ -32,7 +32,7 @@ CORS(app, origins=['http://localhost:5173', 'http://127.0.0.1:5173'])
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 
-GROQ_MODEL = os.environ.get('GROQ_MODEL', 'llama-3.3-70b-versatile')
+GROQ_MODEL = os.environ.get('GROQ_MODEL', 'openai/gpt-oss-120b')
 
 
 def get_api_key():

@@ -27,7 +27,7 @@ Upload your **resume PDF** + paste a **job description** → Get instant AI anal
 | Layer | Technology |
 |---|---|
 | Backend | Python, Flask |
-| AI Model | Groq API (Llama 3.3 70B) |
+| AI Model | Groq API (GPT-OSS 120B) |
 | PDF Parsing | PyPDF2 |
 | Frontend | HTML, CSS, Vanilla JS |
 | Containerization | Docker |
