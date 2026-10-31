@@ -109,6 +109,23 @@ def redact_personal_data(text):
     return re.sub(r'(?<!\w)\+?[\d(][\d\s().-]{7,}\d(?!\w)', redact_phone, text)
 
 
+def is_role_title_only(text):
+    """Identify short, single-line role titles that need a generated starter draft."""
+    words = text.split()
+    common_action_verbs = {
+        'build', 'create', 'design', 'develop', 'ensure', 'implement',
+        'improve', 'lead', 'maintain', 'manage', 'monitor', 'own',
+        'provide', 'support',
+    }
+    return (
+        len(words) <= 8
+        and '\n' not in text
+        and '\r' not in text
+        and not re.search(r'[.!?;:]$', text)
+        and words[0].lower() not in common_action_verbs
+    )
+
+
 @app.after_request
 def add_privacy_headers(response):
     response.headers['Cache-Control'] = 'no-store'
@@ -193,7 +210,7 @@ def health():
 
 @app.route('/optimize', methods=['POST'])
 def optimize_prompt():
-    """Rewrite a raw job description into a structured, ATS-friendly prompt."""
+    """Structure a job description or expand a role title into a starter draft."""
     data = request.get_json(silent=True) or {}
     jd = (data.get('job_description') or '').strip()
 
@@ -210,9 +227,18 @@ def optimize_prompt():
             'error': 'AI is not configured on the server: GROQ_API_KEY is missing. Add it to the .env file next to app.py (or Render env vars) and restart the server.'
         }), 500
 
-    try:
-        optimized = call_groq(
-            f"""Rewrite the following raw job description into a clean, structured, ATS-optimized version.
+    title_only = is_role_title_only(jd)
+    if title_only:
+        instructions = f"""The input contains only a job title: "{jd}".
+Create a useful starter job description for a typical role with this title. This is a general AI-generated draft, not an actual employer's requirements.
+- Suggest realistic, commonly relevant responsibilities and skills for this role.
+- Keep requirements broadly applicable; do not invent an employer, location, salary, years of experience, or mandatory certifications.
+- Put optional or specialized tools under "Nice-to-Have Skills".
+- Organize under these headings: "Role Summary", "Required Skills", "Nice-to-Have Skills", "Responsibilities", "Qualifications".
+- Use concise, specific bullet points. Do not leave sections empty if reasonable general suggestions can be made.
+- Output plain text only, no markdown code fences, no introductory commentary."""
+    else:
+        instructions = f"""Rewrite the following raw job description into a clean, structured, ATS-optimized version.
 
 Rules:
 - Keep ALL original requirements; never invent new ones.
@@ -222,12 +248,16 @@ Rules:
 - Output plain text only, no markdown code fences, no commentary.
 
 RAW JOB DESCRIPTION:
-{jd}""",
+{jd}"""
+
+    try:
+        optimized = call_groq(
+            instructions,
             system_instruction="You are an expert technical recruiter and prompt engineer. You rewrite messy job descriptions into clear, structured, ATS-friendly ones.",
             temperature=0.4,
             max_output_tokens=1200,
         )
-        return jsonify({'optimized': optimized})
+        return jsonify({'optimized': optimized, 'is_draft': title_only})
     except Exception as exc:
         logger.exception('Job description optimization failed (model=%s): %s', GROQ_MODEL, exc)
         return jsonify({'error': f'AI optimization failed: {exc}. Please try again.'}), 500

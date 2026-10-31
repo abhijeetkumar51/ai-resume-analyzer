@@ -19,6 +19,7 @@ Upload your **resume PDF** + paste a **job description** → Get instant AI anal
 - ✅ **Missing Skills** — skills to add
 - ✅ **Strengths & Weaknesses**
 - ✅ **Improvement Suggestions**
+- ✅ **Job description optimizer** — structure role details or generate a clearly labeled starter draft from a role title
 
 ---
 

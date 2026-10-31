@@ -715,13 +715,13 @@
               </div>
 
               <div>
-                <div class="field-label"><label for="job-description">Job description</label><small>Paste the role details</small></div>
+                <div class="field-label"><label for="job-description">Job description</label><small>Paste details or enter a role title</small></div>
                 <div class="textarea-wrap">
-                  <textarea id="job-description" name="job_description" rows="8" required placeholder="Paste the job description here. Include the responsibilities, requirements, and skills that matter for this role." aria-describedby="jd-hint character-count"></textarea>
+                  <textarea id="job-description" name="job_description" rows="8" required placeholder="Paste the job description, or enter a role title (for example, DevOps Engineer) and use Optimize with AI to create a starter draft." aria-describedby="jd-hint character-count"></textarea>
                   <span class="char-count" id="character-count" aria-live="polite" aria-atomic="true">0 characters</span>
                 </div>
                 <div class="jd-controls">
-                  <span class="jd-hint" id="jd-hint">Optional: tidy up a job description before analysis.</span>
+                  <span class="jd-hint" id="jd-hint">Paste a job description, or enter a role title to generate a starter draft.</span>
                   <button class="button button-secondary" type="button" id="optimize-button" aria-describedby="optimize-help" disabled>
                     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7L12 3Zm7 12 .9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
                     <span class="button-spinner" aria-hidden="true"></span>
@@ -1135,7 +1135,7 @@
         const hint = document.getElementById('jd-hint');
         if (hint.classList.contains('success')) {
           hint.classList.remove('success');
-          hint.textContent = 'Optional: tidy up a job description before analysis.';
+          hint.textContent = 'Paste a job description, or enter a role title to generate a starter draft.';
         }
         updateSteps();
       });
@@ -1176,7 +1176,9 @@
           jobDescription.value = data.optimized;
           jobDescription.dispatchEvent(new Event('input'));
           const hint = document.getElementById('jd-hint');
-          hint.textContent = 'Job description optimized. Review it before continuing.';
+          hint.textContent = data.is_draft === true
+            ? 'AI-generated starter draft from the role title. Review and tailor it before continuing.'
+            : 'Job description optimized. Review it before continuing.';
           hint.classList.add('success');
         } catch (error) {
           showError(error instanceof Error ? error.message : 'Could not optimize this job description. Please try again.');
@@ -1298,7 +1300,7 @@
         document.getElementById('file-size').textContent = '';
         document.getElementById('character-count').textContent = '0 characters';
         const hint = document.getElementById('jd-hint');
-        hint.textContent = 'Optional: tidy up a job description before analysis.';
+        hint.textContent = 'Paste a job description, or enter a role title to generate a starter draft.';
         hint.classList.remove('success');
         ['matching-skills', 'missing-skills', 'strengths', 'weaknesses', 'suggestions'].forEach(id => {
           document.getElementById(id).replaceChildren();

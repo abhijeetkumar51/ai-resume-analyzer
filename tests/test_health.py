@@ -2,7 +2,7 @@ import unittest
 from html.parser import HTMLParser
 from unittest.mock import Mock, patch
 
-from app import GROQ_MODEL, app, call_groq
+from app import GROQ_MODEL, app, call_groq, is_role_title_only
 
 
 class ReportLayoutParser(HTMLParser):
@@ -66,6 +66,54 @@ class GroqModelTests(unittest.TestCase):
             'openai/gpt-oss-120b',
         )
         self.assertEqual(GROQ_MODEL, 'openai/gpt-oss-120b')
+
+
+class JobDescriptionOptimizerTests(unittest.TestCase):
+    def setUp(self):
+        app.config['TESTING'] = True
+        self.client = app.test_client()
+
+    def test_short_role_title_is_expanded_as_a_labeled_draft(self):
+        draft = (
+            'Role Summary\n- Support reliable software delivery.\n'
+            'Required Skills\n- CI/CD fundamentals.'
+        )
+        with patch('app.get_api_key', return_value='test-key'), patch(
+            'app.call_groq', return_value=draft
+        ) as call_groq_mock:
+            response = self.client.post(
+                '/optimize',
+                json={'job_description': 'DevOps Engineer', 'consent': True},
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.get_json(), {'optimized': draft, 'is_draft': True})
+        prompt = call_groq_mock.call_args.args[0]
+        self.assertIn('only a job title', prompt)
+        self.assertIn('general AI-generated draft', prompt)
+        self.assertIn('Responsibilities', prompt)
+        self.assertTrue(is_role_title_only('DevOps Engineer'))
+        self.assertFalse(is_role_title_only('Build and maintain CI/CD pipelines'))
+
+    def test_detailed_description_keeps_original_requirements(self):
+        description = (
+            'Build CI/CD pipelines with GitHub Actions. '
+            'Manage AWS infrastructure using Terraform.'
+        )
+        with patch('app.get_api_key', return_value='test-key'), patch(
+            'app.call_groq', return_value='Structured description'
+        ) as call_groq_mock:
+            response = self.client.post(
+                '/optimize',
+                json={'job_description': description, 'consent': True},
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.get_json()['is_draft'])
+        prompt = call_groq_mock.call_args.args[0]
+        self.assertIn('Keep ALL original requirements; never invent new ones.', prompt)
+        self.assertIn(description, prompt)
+        self.assertFalse(is_role_title_only(description))
 
 
 if __name__ == '__main__':
